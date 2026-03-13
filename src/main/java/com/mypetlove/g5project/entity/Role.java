@@ -6,23 +6,22 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
-@AllArgsConstructor
+
 @NoArgsConstructor
-@Slf4j
+@AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Slf4j
 @Builder
-@Table(name = "Categories")
-public class Category {
+@Entity(name = "Roles")
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer roleId;
 
-    private String name;
 
-    private String description;
+    private String roleName;
 
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+    @OneToMany(mappedBy = "role")
+    private List<AccountRole> role;
 }

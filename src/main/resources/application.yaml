@@ -8,7 +8,6 @@ spring:
     url: "jdbc:mysql://localhost:3306/petlover"
     username: root
     password: 123
-
   jpa:
     hibernate:
       ddl-auto: update
