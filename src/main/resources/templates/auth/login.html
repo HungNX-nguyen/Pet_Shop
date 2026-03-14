@@ -1,64 +1,11 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#ec1313",
-                        "background-light": "#f8f6f6",
-                        "background-dark": "#221010",
-                    },
-                    fontFamily: {
-                        "display": ["Plus Jakarta Sans"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-                },
-            },
-        }
-    </script>
-    <title>Login - PetShop</title>
+<head th:replace="~{fragment/head :: head('Login - PetCare')}">
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 transition-colors duration-300">
 <div class="relative flex min-h-screen flex-col">
-    <header class="sticky top-0 z-50 w-full border-b border-primary/10 bg-background-light/80 backdrop-blur-md dark:bg-background-dark/80">
-        <div class="container mx-auto flex h-16 items-center justify-between px-4 lg:px-8">
-            <div class="flex items-center gap-8">
-                <div class="flex items-center gap-2 text-primary">
-                    <span class="material-symbols-outlined text-3xl font-bold">pets</span>
-                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900 dark:text-slate-100">PetShop</h1>
-                </div>
-                <nav class="hidden md:flex items-center gap-6">
-                    <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Shop</a>
-                    <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Services</a>
-                    <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">About</a>
-                    <a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Contact</a>
-                </nav>
-            </div>
-            <div class="flex flex-1 items-center justify-end gap-4 lg:gap-6">
-                <div class="relative hidden sm:block w-full max-w-xs">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
-                    <input class="w-full rounded-full border-primary/10 bg-primary/5 py-2 pl-10 pr-4 text-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" placeholder="Search products..." type="text"/>
-                </div>
-                <div class="flex items-center gap-2">
-                    <button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-primary/10 text-slate-700 dark:text-slate-200 transition-colors">
-                        <span class="material-symbols-outlined">shopping_cart</span>
-                    </button>
-                    <button class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors">
-                        <span class="material-symbols-outlined">account_circle</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Header Fragment -->
+    <header th:replace="~{fragment/header :: header}"></header>
 
     <main class="flex flex-1 items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
         <div class="w-full max-w-md space-y-8 bg-white dark:bg-slate-900 p-8 rounded-2xl shadow-xl shadow-primary/5 border border-primary/5">
@@ -144,29 +91,9 @@
         </div>
     </main>
 
-    <footer class="border-t border-primary/10 py-8 dark:bg-background-dark/50">
-        <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                <div class="flex items-center gap-2 text-primary opacity-80">
-                    <span class="material-symbols-outlined">pets</span>
-                    <span class="text-sm font-bold tracking-tight">PetShop © 2024</span>
-                </div>
-                <div class="flex gap-8 text-xs font-medium text-slate-500 dark:text-slate-400">
-                    <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
-                    <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
-                    <a class="hover:text-primary transition-colors" href="#">Cookies</a>
-                </div>
-                <div class="flex gap-4">
-                    <a class="h-8 w-8 flex items-center justify-center rounded-full bg-primary/5 text-primary hover:bg-primary/20 transition-all" href="#">
-                        <span class="material-symbols-outlined text-lg">public</span>
-                    </a>
-                    <a class="h-8 w-8 flex items-center justify-center rounded-full bg-primary/5 text-primary hover:bg-primary/20 transition-all" href="#">
-                        <span class="material-symbols-outlined text-lg">chat_bubble</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <!-- Footer Fragment -->
+    <footer th:replace="~{fragment/footer :: footer}"></footer>
+
 </div>
 </body>
 </html>
