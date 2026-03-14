@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "petId")
     private Integer petId;
 
     private String name;
