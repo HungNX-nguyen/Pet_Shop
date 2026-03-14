@@ -23,18 +23,23 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "booking_code")
     private String bookingCode;
 
+    @Column(name = "booking_date")
     private LocalDate bookingDate;
 
+    @Column(name = "time_slot")
     private String timeSlot;
 
     private String status;
 
+    @Column(name = "total_price")
     private BigDecimal totalPrice;
 
     private String note;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
