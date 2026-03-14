@@ -18,12 +18,12 @@ public class AccountRole {
 
     @ManyToOne
     @MapsId("accountId")
-    @JoinColumn(name = "accountId")
+    @JoinColumn(name = "account_id")
     private Account account;
 
     @ManyToOne
     @MapsId("roleId")
-    @JoinColumn(name = "roleId")
+    @JoinColumn(name = "role_id")
     private Role role;
 }
 
