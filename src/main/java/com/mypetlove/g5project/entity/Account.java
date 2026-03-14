@@ -19,6 +19,7 @@ import java.util.List;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_id")
     private Integer accountID;
 
     @Column(unique = true, nullable = false)
@@ -33,12 +34,16 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
+    @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "is_active")
     private Boolean isActive;
 
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)

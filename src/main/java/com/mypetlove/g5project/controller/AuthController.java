@@ -2,7 +2,12 @@ package com.mypetlove.g5project.controller;
 
 import com.mypetlove.g5project.dto.RegisterDto;
 import com.mypetlove.g5project.entity.Account;
+import com.mypetlove.g5project.entity.AccountRole;
+import com.mypetlove.g5project.entity.AccountRoleId;
+import com.mypetlove.g5project.entity.Role;
 import com.mypetlove.g5project.repository.AccountRepository;
+import com.mypetlove.g5project.repository.AccountRoleRepository;
+import com.mypetlove.g5project.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +25,8 @@ public class AuthController {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final AccountRoleRepository accountRoleRepository;
 
     // 1. Màn hình Đăng nhập
     @GetMapping("/login")
@@ -64,8 +71,25 @@ public class AuthController {
                     .updatedAt(LocalDateTime.now())
                     .build();
 
+            Role customerRole = roleRepository.findByRoleName("CUSTOMER")
+                    .orElseThrow(() -> new RuntimeException("Role CUSTOMER không tồn tại!"));
+
+            AccountRoleId accountRoleId = AccountRoleId.builder()
+                    .accountId(newAccount.getAccountID())
+                    .roleId(customerRole.getRoleId())
+                    .build();
+
+            AccountRole newAccountRole = AccountRole.builder()
+                    .id(accountRoleId)
+                    .account(newAccount)
+                    .role(customerRole)
+                    .build();
+            accountRoleRepository.save(newAccountRole);
+
+
             // Bước 4: Lưu xuống Database
             accountRepository.save(newAccount);
+
 
             // Bước 5: Thông báo thành công và chuyển hướng sang trang Login
             redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Bạn có thể đăng nhập ngay.");
