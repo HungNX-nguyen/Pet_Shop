@@ -24,7 +24,7 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = false, nullable = false)
+    @Column(name = "fullName", nullable = false)
     private String fullName;
 
     @Column(unique = true)
