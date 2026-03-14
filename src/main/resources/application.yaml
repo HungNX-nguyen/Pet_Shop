@@ -1,25 +1,21 @@
-server:
-  port: 8080
-  servlet:
-    context-path: /petlover
-
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3306/petlover"
-    username: root
+    url: jdbc:sqlserver://LAPTOP-QRM3R0DM\\SQLEXPRESS;databaseName=petlover;encrypt=true;trustServerCertificate=true
+    username: sa
     password: 123
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 
-
-  # Thymeleaf Configuration
   thymeleaf:
     cache: false
-    mode: HTML
-    encoding: UTF-8
-    prefix: classpath:/templates/
-    suffix: .html
 
-
+server:
+  port: 8080
