@@ -41,9 +41,7 @@ public class Account {
 
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "account",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AccountRole> accountRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner")

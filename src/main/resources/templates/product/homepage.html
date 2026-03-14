@@ -1,10 +1,655 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!doctype html>
 
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>PetCare - Your Pet's Happy Place</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet"
+    />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+            rel="stylesheet"
+    />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        display: ["Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px",
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+<body
+        class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100"
+>
+<!-- Top Navigation Bar -->
+<header
+        class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10"
+>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-3xl"
+            >pets</span
+            >
+                <span
+                        class="text-xl font-bold tracking-tight text-slate-900 dark:text-white"
+                >PetCare</span
+                >
+            </div>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a
+                        class="text-sm font-semibold hover:text-primary transition-colors"
+                        href="#"
+                >Home</a
+                >
+                <a
+                        class="text-sm font-semibold hover:text-primary transition-colors"
+                        href="#"
+                >Shop</a
+                >
+                <a
+                        class="text-sm font-semibold hover:text-primary transition-colors"
+                        href="#"
+                >Services</a
+                >
+                <a
+                        class="text-sm font-semibold hover:text-primary transition-colors"
+                        href="#"
+                >About</a
+                >
+            </nav>
+            <!-- Search and Cart -->
+            <div class="flex items-center gap-4">
+                <div class="relative hidden sm:block">
+              <span
+                      class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"
+              >search</span
+              >
+                    <input
+                            class="pl-10 pr-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-primary w-48 lg:w-64"
+                            placeholder="Search products..."
+                            type="text"
+                    />
+                </div>
+                <button
+                        class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
+                >
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span
+                            class="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                    >3</span
+                    >
+                </button>
+                <div
+                        class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20"
+                >
+                    <img
+                            alt="User Avatar"
+                            class="w-full h-full object-cover"
+                            data-alt="Portrait of a smiling male customer profile"
+                            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD6FGoZDNzBvOlMhXlvQYgK7WrMMGAlQhkhJMd8HSCGsAh9gqlr7Ju4pU7bSba3o6YjUeJ4hb8Im9DrLa3ziC-rLDA4wKD0VpwOwk9QA2dofV6sgqRJfYp-nxQbAclXGAP-eDSK0nxkDrTOvyKYYO5E5LwwEo5rgneZ_WRpZOSa0Bt0wD3V7QvwreTOKMTiICWTOZAiZu_DWWgNYRGHQd7y0zrnykcGgpECOSZc-pJQ3Vb5yLSsRSYqGYG22FAksGpSm1LY_-ooQ"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<main>
+    <!-- Hero Section -->
+    <section class="relative py-12 lg:py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="z-10 text-center lg:text-left">
+              <span
+                      class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-bold rounded-full mb-6"
+              >NEW ARRIVALS 2024</span
+              >
+                    <h1
+                            class="text-5xl lg:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6"
+                    >
+                        Your Pet's <br /><span class="text-primary">Happy Place</span>
+                    </h1>
+                    <p
+                            class="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0"
+                    >
+                        Discover the best premium food, interactive toys, and
+                        professional care essentials for your furry best friends.
+                    </p>
+                    <div
+                            class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
+                    >
+                        <button
+                                class="px-8 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25"
+                        >
+                            Shop Now
+                        </button>
+                        <button
+                                class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 transition-all"
+                        >
+                            View Services
+                        </button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div
+                            class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/5 rounded-full blur-3xl"
+                    ></div>
+                    <div
+                            class="rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500"
+                    >
+                        <img
+                                alt="Happy Dog"
+                                class="w-full h-full object-cover aspect-[4/3]"
+                                data-alt="A happy golden retriever dog smiling at the camera"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZp3U2gd-_MIcxs6S22-ezhFu_ZkDwCKrdJ73nXHrlKTVqbqbvRxe1kF_63Htp6k5f6m6G0NJ-RJ1J9-guEYMZ0ZxbTKghoIdMSihHCIaxWGW9DLJKOTWvkjcYzZogiFZE_KdGfOsEhU_uil1FPNwH6Xe0Xa1FfqqAEnwWDAFhFZYRJyFwuPbl98h068AYwXTbUujm_UdjdXAhGdchDL-ukM-041eHj_c5vLcF87TFjeJvNXy1XgPi7hbB1oIrkPU4qPYGBsWk4w"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Categories -->
+    <section class="py-16 bg-white dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Shop by Category</h2>
+                <p class="text-slate-500">
+                    Everything your pet needs to thrive and play
+                </p>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Food -->
+                <div class="group cursor-pointer">
+                    <div
+                            class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2"
+                    >
+                <span
+                        class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white"
+                >restaurant</span
+                >
+                        <h3 class="font-bold text-lg group-hover:text-white">
+                            Premium Food
+                        </h3>
+                        <p class="text-sm text-slate-500 group-hover:text-white/80">
+                            Nutritious &amp; Tasty
+                        </p>
+                    </div>
+                </div>
+                <!-- Toys -->
+                <div class="group cursor-pointer">
+                    <div
+                            class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2"
+                    >
+                <span
+                        class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white"
+                >toys</span
+                >
+                        <h3 class="font-bold text-lg group-hover:text-white">
+                            Fun Toys
+                        </h3>
+                        <p class="text-sm text-slate-500 group-hover:text-white/80">
+                            Active &amp; Engaging
+                        </p>
+                    </div>
+                </div>
+                <!-- Accessories -->
+                <div class="group cursor-pointer">
+                    <div
+                            class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2"
+                    >
+                <span
+                        class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white"
+                >content_cut</span
+                >
+                        <h3 class="font-bold text-lg group-hover:text-white">
+                            Accessories
+                        </h3>
+                        <p class="text-sm text-slate-500 group-hover:text-white/80">
+                            Style &amp; Comfort
+                        </p>
+                    </div>
+                </div>
+                <!-- Health -->
+                <div class="group cursor-pointer">
+                    <div
+                            class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2"
+                    >
+                <span
+                        class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white"
+                >health_and_safety</span
+                >
+                        <h3 class="font-bold text-lg group-hover:text-white">
+                            Pet Health
+                        </h3>
+                        <p class="text-sm text-slate-500 group-hover:text-white/80">
+                            Wellness Kits
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Best Sellers -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Best Sellers</h2>
+                    <p class="text-slate-500">Our most popular products this month</p>
+                </div>
+                <a
+                        class="text-primary font-bold flex items-center gap-2 hover:underline"
+                        href="#"
+                >
+                    View All Products
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Product Card 1 -->
+                <div
+                        class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group"
+                >
+                    <div class="relative aspect-square overflow-hidden bg-slate-50">
+                        <img
+                                alt="Pet Food"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                data-alt="Bag of premium organic dog food with ingredients shown"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCK7W2RtdBwpgdDkgVSx9Esgof5mUqWBpEQxZUU9Q5xXPKxkSc_zk4gEjGZb9NnOHuNWGaY8xrNeFVKG4KS6jXx57XQASaKdl8u7qT_j8NiinQbcgbv2BcuTySZqhz2pdSvBr7e4rWlsriAutBWiDkPnXxaq2vqUvquvNu6An4T7o_4ed8lPxlHeVMxU3VT-eKbwSlA7QZjXJtQdd4LUBe_bT0ckKJvbe_J5OKN0qfr4ogQ7TpR18vZ3qvjDLtSXsczxR1qJiHY7w"
+                        />
+                        <div class="absolute top-3 right-3">
+                            <button
+                                    class="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-slate-900 hover:text-primary transition-colors"
+                            >
+                    <span class="material-symbols-outlined text-xl"
+                    >favorite</span
+                    >
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1 text-amber-400 mb-2">
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="text-xs text-slate-400 ml-1">(48)</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-1">
+                            Organic Puppy Mix
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-4">
+                            Healthy Growth Formula
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">$24.99</span>
+                            <button
+                                    class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity"
+                            >
+                    <span class="material-symbols-outlined"
+                    >add_shopping_cart</span
+                    >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 2 -->
+                <div
+                        class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group"
+                >
+                    <div class="relative aspect-square overflow-hidden bg-slate-50">
+                        <img
+                                alt="Dog Toy"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                data-alt="Durable rubber chew toy for large dogs"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2U0HFCVYb3TbBmdlWWfhUf9yzg4YyBKpRZweOzaQX1qI0kMcYUohZpM49EwkQLxZQ-UHXdMTUise1POU285DRlrEooI-Y7gQHR_M11sfIs1j0uhre9iSqFPwK5D-2KjNtGgvdQHbJcFMFF6cVqoKH_KEujAYdkIZ1jlJGEzU1kl4TRPpD4DKHL6yhO1ikmiWGhLnoD4etTnwlAP0QNSvWXvgcpQdX0jiZf4Hej7GnHd6XtYswDxdo06gY6X7Jf6LZIFNb8_Emiw"
+                        />
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1 text-amber-400 mb-2">
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm"
+                            >star_half</span
+                            >
+                            <span class="text-xs text-slate-400 ml-1">(124)</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-1">
+                            Indestructible Chew Toy
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-4">Natural Rubber</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">$15.50</span>
+                            <button
+                                    class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity"
+                            >
+                    <span class="material-symbols-outlined"
+                    >add_shopping_cart</span
+                    >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 3 -->
+                <div
+                        class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group"
+                >
+                    <div class="relative aspect-square overflow-hidden bg-slate-50">
+                        <img
+                                alt="Cat Tree"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                data-alt="Multi-level modern cat tree with scratching posts"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBarg3N8ScWuseBWFxhm6Dg2xhdK1b-uv4WQcjwWXye7Sd4_v8-_LKy0Snuw-3eceHpTGhMBpftsWZPzL1lmXqTR8s1Cx4niidTj-VSKe6B9Ag7OiipxJ-Avqo8Cg0cmqu2vDhAJbRue4YzI5hRHShE4pUUAPTa0Sn_ykqBfO53lsv0qtk4pOqY5f7NYp0Cm_HB3Z0hIq_xs3fleRp2mGUnm4CrCwK6qGYOA4owBSN3BnPoxVdpE5e22RmePcMkihQlNTo8iJrsIg"
+                        />
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1 text-amber-400 mb-2">
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="text-xs text-slate-400 ml-1">(82)</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-1">
+                            Luxury Cat Condo
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-4">
+                            4-Level Activity Tower
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">$129.00</span>
+                            <button
+                                    class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity"
+                            >
+                    <span class="material-symbols-outlined"
+                    >add_shopping_cart</span
+                    >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Product Card 4 -->
+                <div
+                        class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group"
+                >
+                    <div class="relative aspect-square overflow-hidden bg-slate-50">
+                        <img
+                                alt="Dog Grooming"
+                                class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                data-alt="Professional dog grooming kit with brushes and scissors"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiORd9ed8BYBY1FwVvBZrHUuCVd1Bp9QOiyInuXN4iugp_aGDjceS3J-OJzSbu_3kYHm1Tfye_Upvuw5i-cJ4Gx52PkV_8mwYTR2NtyEvsELcR7ls_pXClj-CNPuxXwqlmkAARoQu6zVjVJDpQq3Il_W9280gVrMclw6XBAjOZdy0o6y8tksMwlndqNbsTfSxYzpgdSn4jQ9MgqlHMqNErwFWD3L3UKJKSnbOxFefVl5oyCSfRnnGuIA8G2oGpPQhyoVYyCTiEyw"
+                        />
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1 text-amber-400 mb-2">
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="material-symbols-outlined text-sm">star</span>
+                            <span class="text-xs text-slate-400 ml-1">(56)</span>
+                        </div>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-1">
+                            Self-Cleaning Brush
+                        </h3>
+                        <p class="text-sm text-slate-500 mb-4">Gentle Grooming Tool</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary">$19.95</span>
+                            <button
+                                    class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity"
+                            >
+                    <span class="material-symbols-outlined"
+                    >add_shopping_cart</span
+                    >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="py-16 bg-primary/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Happy Tails</h2>
+                <p class="text-slate-500">Read what our pet parents have to say</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div
+                        class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10"
+                >
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img
+                                    alt="Sarah J."
+                                    class="w-full h-full object-cover"
+                                    data-alt="Close up portrait of a smiling woman"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEIKUPzUS43jwTqAlojN2lTEkCLEzjJ5tc0eu2hHQ-o9r6OV2A7X_szTRwisVGXL4UCOP8LKRythcJIOnwjZIbhew7rE_2ajykjU3kNc3x8qakbTiL-ntOuOvifs_3AGsDJpgMgCN2qVAyT2YXV6W6e-nIWP80OIn7tNXLhKs-z8Nq5VwRpj5POx4kvP-Gm4CJp891Tne0_jyL-sUzuj7Zg008ZNLJA1C7VYQUo02031bpCbUeOShhi9tY3Wc0b7oLt1RWC5x8tg"
+                            />
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Sarah J.</h4>
+                            <p class="text-xs text-slate-400">Owner of 2 Huskies</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">
+                        "The quality of the food here is unmatched. My boys have so much
+                        more energy and their coats are finally shining!"
+                    </p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div
+                        class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10"
+                >
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img
+                                    alt="Mark D."
+                                    class="w-full h-full object-cover"
+                                    data-alt="Portrait of a smiling man with glasses"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOb3LSp3YLMzUxgaWHwtxlFwbMOS2U7JL_0hvuPi1p7K31dKFHHHZ8k3cBJsgAgGMCkljao9-_TTi44VXr3Wny94rGhLnH7CvrqvY9LEdSVshid45deMRNZe717NNB-RFk54x7gISIBvlPkTRdTaRgq7N929fpqXXRji_g2fMtDkQOVeDc-v9ilM3JuIiZ0aY7iiCdUh5f-OiWem8lkakQXAR4sRWro3yATV5qSDjt4gkJxxddQ0vzuvEjw9mwfThheTTQacmUEQ"
+                            />
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Mark D.</h4>
+                            <p class="text-xs text-slate-400">Owner of Bella (Tabby)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">
+                        "Fast shipping and incredible customer service. The luxury cat
+                        tree we bought is Bella's new favorite kingdom."
+                    </p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div
+                        class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10"
+                >
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img
+                                    alt="Elena R."
+                                    class="w-full h-full object-cover"
+                                    data-alt="Portrait of a young woman with a friendly smile"
+                                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdHQvA6sKET3Vtk93pdzIi42QQNf-hcIXLoG2eoXEVJIgn0CT9-6DTfZyWG0033FtddQ0X7E3aOti8ZNwWNvSbmNNNZnCfQkNY9od1opK9V0dZQJSDgzrWgz6wsNe3NUACKlXSL1pJ9eg8TX4lAvPAAQWP1OEezxVaxvbc8OM6d4PmoxBSRC1LJIWzuyJJmMPGjc2JpZ9Y48DuTArCt90P6xz1UbhviQ-JBV4nKQwAcr8Bl6jSzMq__ZOuVYDIhfo2oGhBbVp2Ow"
+                            />
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Elena R.</h4>
+                            <p class="text-xs text-slate-400">Owner of Cooper (Beagle)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">
+                        "I love the curated health kits. It makes taking care of
+                        Cooper's wellness so much simpler and stress-free."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-900 text-slate-300 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div
+                class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12"
+        >
+            <div>
+                <div class="flex items-center gap-2 mb-6 text-white">
+              <span class="material-symbols-outlined text-primary text-3xl"
+              >pets</span
+              >
+                    <span class="text-2xl font-bold tracking-tight">PetCare</span>
+                </div>
+                <p class="text-sm leading-relaxed mb-6">
+                    Dedicated to providing the highest quality products and care for
+                    your beloved animal companions since 2012.
+                </p>
+                <div class="flex items-center gap-4">
+                    <a
+                            class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors text-white"
+                            href="#"
+                    >
+                        <span class="material-symbols-outlined text-sm">public</span>
+                    </a>
+                    <a
+                            class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors text-white"
+                            href="#"
+                    >
+                        <span class="material-symbols-outlined text-sm">share</span>
+                    </a>
+                    <a
+                            class="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors text-white"
+                            href="#"
+                    >
+                        <span class="material-symbols-outlined text-sm">mail</span>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h4
+                        class="text-white font-bold mb-6 uppercase text-xs tracking-widest"
+                >
+                    Quick Links
+                </h4>
+                <ul class="space-y-4 text-sm">
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Our Story</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Pet Adoption</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Shipping Policy</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Rewards Program</a
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4
+                        class="text-white font-bold mb-6 uppercase text-xs tracking-widest"
+                >
+                    Categories
+                </h4>
+                <ul class="space-y-4 text-sm">
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Dog Supplies</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Cat Essentials</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Small Pets</a
+                        >
+                    </li>
+                    <li>
+                        <a class="hover:text-primary transition-colors" href="#"
+                        >Vet Pharmacy</a
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <h4
+                        class="text-white font-bold mb-6 uppercase text-xs tracking-widest"
+                >
+                    Contact Us
+                </h4>
+                <ul class="space-y-4 text-sm">
+                    <li class="flex items-start gap-3">
+                <span class="material-symbols-outlined text-primary"
+                >location_on</span
+                >
+                        <span>123 Pet Lane, Animal Valley,<br />PA 19001, USA</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-primary">call</span>
+                        <span>+1 (800) PET-CARE</span>
+                    </li>
+                    <li class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary"
+                >schedule</span
+                >
+                        <span>Mon - Sun: 9 AM - 9 PM</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div
+                class="pt-8 border-t border-slate-800 text-center text-xs text-slate-500"
+        >
+            <p>
+                © 2024 PetCare Inc. All rights reserved. Designed for furry friends
+                everywhere.
+            </p>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
