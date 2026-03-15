@@ -24,3 +24,22 @@ UPDATE dbo.Services
 SET is_active = 1
 WHERE is_active IS NULL;
 GO
+
+IF COL_LENGTH('Services', 'category') IS NULL
+BEGIN
+    ALTER TABLE Services
+    ADD category NVARCHAR(50) NOT NULL
+        CONSTRAINT DF_Services_Category DEFAULT 'General';
+END
+GO
+
+UPDATE Services
+SET category =
+    CASE
+        WHEN name LIKE N'%Groom%' THEN N'Grooming'
+        WHEN name LIKE N'%Vaccination%' THEN N'Veterinary'
+        WHEN name LIKE N'%Socialization%' THEN N'Training'
+        ELSE N'General'
+    END
+WHERE category = 'General';
+GO

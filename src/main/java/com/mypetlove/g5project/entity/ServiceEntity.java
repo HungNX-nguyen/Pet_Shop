@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +15,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "Services")
-public class Service {
+public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -27,6 +26,9 @@ public class Service {
 
     @Column(length = 255)
     private String name;
+
+    @Column(name = "category", length = 50, nullable = false)
+    private String category;
 
     @Lob
     private String description;
