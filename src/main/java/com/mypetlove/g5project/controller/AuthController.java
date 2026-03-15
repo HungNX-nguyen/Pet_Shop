@@ -60,12 +60,18 @@ public class AuthController {
             return "auth/register";
         }
 
+        // Bước 2.1: Kiểm tra username đã tồn tại trong hệ thống chưa
+        if (accountRepository.existsByUsername(registerDto.getUsername())) {
+            model.addAttribute("error", "Username này đã được sử dụng!");
+            return "auth/register";
+        }
+
         try {
             // Bước 3: Ánh xạ dữ liệu từ DTO sang Entity Account
             Account newAccount = Account.builder()
                     .fullName(registerDto.getFullName())
                     .email(registerDto.getEmail())
-                    .username(registerDto.getEmail())
+                    .username(registerDto.getUsername())
                     .password(passwordEncoder.encode(registerDto.getPassword()))
                     .isActive(true)
                     .createdAt(LocalDateTime.now())
