@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<header th:fragment="header" class="sticky top-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-primary/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-3xl">pets</span>
+                <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">PetCare</span>
+            </div>
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a class="text-sm font-semibold hover:text-primary transition-colors" th:href="@{/}">Home</a>
+                <a class="text-sm font-semibold hover:text-primary transition-colors" th:href="@{/products}">Shop</a>
+                <a class="text-sm font-semibold hover:text-primary transition-colors" href="#services">Services</a>
+                <a class="text-sm font-semibold hover:text-primary transition-colors" href="#about">About</a>
+            </nav>
+            <!-- Search and Cart -->
+            <div class="flex items-center gap-4">
+                <form th:action="@{/products}" method="get" class="relative hidden sm:block"
+                      onsubmit="var cid=new URLSearchParams(window.location.search).get('categoryId'); if(cid){var h=document.createElement('input');h.type='hidden';h.name='categoryId';h.value=cid;this.appendChild(h);}">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+                    <input name="keyword"
+                           class="pl-10 pr-4 py-1.5 rounded-full bg-slate-100 dark:bg-slate-800 border-none text-sm focus:ring-2 focus:ring-primary w-48 lg:w-64"
+                           placeholder="Search products..."
+                           type="text"/>
+                </form>
+                <button class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                    <span class="material-symbols-outlined">shopping_cart</span>
+                    <span class="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
+                </button>
+
+                <!-- Khi đã đăng nhập: avatar + dropdown -->
+                <div sec:authorize="isAuthenticated()" class="relative" id="userMenuWrapper">
+                    <!-- Avatar button -->
+                    <button type="button"
+                            id="userMenuBtn"
+                            class="flex items-center gap-2 focus:outline-none group"
+                            onclick="(function(e){
+                                e.stopPropagation();
+                                var d = document.getElementById('userDropdown');
+                                var c = document.getElementById('userMenuChevron');
+                                var hidden = d.classList.toggle('hidden');
+                                c.style.transform = hidden ? 'rotate(0deg)' : 'rotate(180deg)';
+                            })(event)">
+                        <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden border border-primary/20 group-hover:ring-2 group-hover:ring-primary/40 transition-all">
+                            <img alt="User Avatar" class="w-full h-full object-cover pointer-events-none"
+                                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD6FGoZDNzBvOlMhXlvQYgK7WrMMGAlQhkhJMd8HSCGsAh9gqlr7Ju4pU7bSba3o6YjUeJ4hb8Im9DrLa3ziC-rLDA4wKD0VpwOwk9QA2dofV6sgqRJfYp-nxQbAclXGAP-eDSK0nxkDrTOvyKYYO5E5LwwEo5rgneZ_WRpZOSa0Bt0wD3V7QvwreTOKMTiICWTOZAiZu_DWWgNYRGHQd7y0zrnykcGgpECOSZc-pJQ3Vb5yLSsRSYqGYG22FAksGpSm1LY_-ooQ"/>
+                        </div>
+                        <span class="material-symbols-outlined text-slate-500 text-sm pointer-events-none" id="userMenuChevron">expand_more</span>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="userDropdown"
+                         class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 overflow-hidden z-50">
+
+                        <!-- User info -->
+                        <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                            <p class="text-xs text-slate-400">Signed in as</p>
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white truncate"
+                               sec:authentication="name">username</p>
+                        </div>
+
+                        <!-- Menu items -->
+                        <ul class="py-1">
+                            <li>
+                                <a th:href="@{/profile}"
+                                   class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/5 hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-base">account_circle</span>
+                                    User Profile
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/orders}"
+                                   class="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-300 hover:bg-primary/5 hover:text-primary transition-colors">
+                                    <span class="material-symbols-outlined text-base">receipt_long</span>
+                                    Order History
+                                </a>
+                            </li>
+                            <li class="border-t border-slate-100 dark:border-slate-700 mt-1 pt-1">
+                                <form th:action="@{/logout}" method="post">
+                                    <button type="submit"
+                                            class="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
+                                        <span class="material-symbols-outlined text-base">logout</span>
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Khi chưa đăng nhập: hiện nút Login / Register -->
+                <div sec:authorize="isAnonymous()" class="flex items-center gap-2">
+                    <a th:href="@{/login}"
+                       class="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-primary transition-colors">
+                        Login
+                    </a>
+                    <span class="text-slate-300 dark:text-slate-600">|</span>
+                    <a th:href="@{/register}"
+                       class="text-sm font-semibold px-4 py-1.5 bg-primary text-white rounded-full hover:bg-primary/90 transition-colors">
+                        Register
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Script đặt cuối body, sau khi tất cả fragment đã render xong -->
+<script>
+    document.addEventListener('click', function (e) {
+        var wrapper = document.getElementById('userMenuWrapper');
+        var dropdown = document.getElementById('userDropdown');
+        var chevron = document.getElementById('userMenuChevron');
+        if (!wrapper || !dropdown) return;
+        if (!wrapper.contains(e.target)) {
+            dropdown.classList.add('hidden');
+            if (chevron) chevron.style.transform = 'rotate(0deg)';
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -26,6 +26,7 @@ public class Feedback {
 
     private String comment;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne

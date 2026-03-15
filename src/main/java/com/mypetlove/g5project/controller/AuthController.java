@@ -2,10 +2,16 @@ package com.mypetlove.g5project.controller;
 
 import com.mypetlove.g5project.dto.RegisterDto;
 import com.mypetlove.g5project.entity.Account;
+import com.mypetlove.g5project.entity.AccountRole;
+import com.mypetlove.g5project.entity.AccountRoleId;
+import com.mypetlove.g5project.entity.Role;
 import com.mypetlove.g5project.repository.AccountRepository;
+import com.mypetlove.g5project.repository.AccountRoleRepository;
+import com.mypetlove.g5project.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +26,8 @@ public class AuthController {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
+    private final AccountRoleRepository accountRoleRepository;
 
     // 1. Màn hình Đăng nhập
     @GetMapping("/login")
@@ -34,6 +42,7 @@ public class AuthController {
     }
 
     // 3. Xử lý Logic Đăng ký
+    @Transactional
     @PostMapping("/register")
     public String processRegister(@ModelAttribute RegisterDto registerDto,
                                   Model model,
@@ -53,26 +62,42 @@ public class AuthController {
 
         try {
             // Bước 3: Ánh xạ dữ liệu từ DTO sang Entity Account
-            // BẢN CHẤT: Đảm bảo fullName không bị null để tránh lỗi MySQL
             Account newAccount = Account.builder()
-                    .fullName(registerDto.getFullName()) // Lấy từ DTO
-                    .email(registerDto.getEmail())       // Lấy từ DTO
-                    .username(registerDto.getEmail())    // Tạm dùng email làm username (NOT NULL)
-                    .password(passwordEncoder.encode(registerDto.getPassword())) // Băm mật khẩu
+                    .fullName(registerDto.getFullName())
+                    .email(registerDto.getEmail())
+                    .username(registerDto.getEmail())
+                    .password(passwordEncoder.encode(registerDto.getPassword()))
                     .isActive(true)
                     .createdAt(LocalDateTime.now())
                     .updatedAt(LocalDateTime.now())
                     .build();
 
-            // Bước 4: Lưu xuống Database
+            // Bước 4: Lưu Account TRƯỚC để có ID
             accountRepository.save(newAccount);
 
-            // Bước 5: Thông báo thành công và chuyển hướng sang trang Login
+            // Bước 5: Tìm Role CUSTOMER
+            Role customerRole = roleRepository.findByRoleName("CUSTOMER")
+                    .orElseThrow(() -> new RuntimeException("Role CUSTOMER không tồn tại!"));
+
+            // Bước 6: Build composite key SAU KHI đã có accountId
+            AccountRoleId accountRoleId = AccountRoleId.builder()
+                    .accountId(newAccount.getAccountID())
+                    .roleId(customerRole.getRoleId())
+                    .build();
+
+            // Bước 7: Build và lưu AccountRole
+            AccountRole newAccountRole = AccountRole.builder()
+                    .id(accountRoleId)
+                    .account(newAccount)
+                    .role(customerRole)
+                    .build();
+            accountRoleRepository.save(newAccountRole);
+
+            // Bước 8: Thông báo thành công và chuyển hướng sang trang Login
             redirectAttributes.addFlashAttribute("success", "Đăng ký thành công! Bạn có thể đăng nhập ngay.");
             return "redirect:/login";
 
         } catch (Exception e) {
-            // Xử lý lỗi phát sinh ngoài dự kiến (ví dụ lỗi DB)
             model.addAttribute("error", "Có lỗi xảy ra: " + e.getMessage());
             return "auth/register";
         }
