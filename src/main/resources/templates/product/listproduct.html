@@ -102,21 +102,22 @@
         <div class="flex-1">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Lặp qua danh sách products từ Model -->
-                <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300"
-                     th:each="product : ${products}">
+                <a class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300 block"
+                     th:each="product : ${products}"
+                     th:href="@{/products/{id}(id=${product.id})}">
                     <div class="aspect-square relative overflow-hidden bg-primary/5">
                         <img th:alt="${product.name}"
                              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                              th:src="${product.imageUrl}"
                              src="https://via.placeholder.com/300"/>
-                        <button class="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow-sm text-slate-400 hover:text-primary transition-colors">
+                        <span class="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow-sm text-slate-400 hover:text-primary transition-colors">
                             <span class="material-symbols-outlined">favorite</span>
-                        </button>
+                        </span>
                     </div>
                     <div class="p-5">
                         <p class="text-xs text-primary font-semibold mb-2"
-                           th:if="${product.category != null}"
-                           th:text="${product.category.name}">Category</p>
+                           th:if="${product.categoryName != null}"
+                           th:text="${product.categoryName}">Category</p>
                         <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1 group-hover:text-primary transition-colors"
                             th:text="${product.name}">Product Name</h3>
                         <p class="text-slate-500 text-xs mb-4"
@@ -124,12 +125,12 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-black text-slate-900 dark:text-slate-100"
                                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
-                            <button class="p-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                            <span class="p-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
                                 <span class="material-symbols-outlined">add_shopping_cart</span>
-                            </button>
+                            </span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Thông báo nếu không có sản phẩm -->

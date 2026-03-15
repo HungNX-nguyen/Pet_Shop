@@ -68,8 +68,9 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Lặp qua danh sách bestSellers từ Model -->
-                <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group"
-                     th:each="product : ${bestSellers}">
+                <a class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group block"
+                     th:each="product : ${bestSellers}"
+                     th:href="@{/products/{id}(id=${product.id})}">
                     <div class="relative aspect-square overflow-hidden bg-slate-50">
                         <img th:alt="${product.name}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -84,8 +85,8 @@
                     <div class="p-5">
                         <!-- Hiển thị category name nếu có -->
                         <p class="text-xs text-primary font-semibold mb-2"
-                           th:if="${product.category != null}"
-                           th:text="${product.category.name}">Category</p>
+                           th:if="${product.categoryName != null}"
+                           th:text="${product.categoryName}">Category</p>
                         <h3 class="font-bold text-slate-900 dark:text-white mb-1"
                             th:text="${product.name}">Product Name</h3>
                         <p class="text-sm text-slate-500 mb-4"
@@ -93,12 +94,12 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-bold text-primary"
                                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
-                            <button class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                            <span class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
                                 <span class="material-symbols-outlined">add_shopping_cart</span>
-                            </button>
+                            </span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
