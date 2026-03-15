@@ -19,13 +19,12 @@ import java.util.List;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
     private Integer accountID;
 
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "full_Name", nullable = false)
+    @Column(name = "fullName", nullable = false)
     private String fullName;
 
     @Column(unique = true)
@@ -34,19 +33,17 @@ public class Account {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<AccountRole> accountRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner")
@@ -61,8 +58,8 @@ public class Account {
     @OneToMany(mappedBy = "creator")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "createdBy")
-    private List<ServiceEntity> serviceEntities;
+    @OneToMany(mappedBy = "creator")
+    private List<Service> services;
 
 
     @OneToMany(mappedBy = "customer")
