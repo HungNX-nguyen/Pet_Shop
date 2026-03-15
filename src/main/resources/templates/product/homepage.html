@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: head(|PetCare - Your Pet's Happy Place|)}">
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<!-- Header Fragment -->
+<header th:replace="~{fragment/header :: header}"></header>
+
+<main>
+    <!-- Hero Section -->
+    <section class="relative py-12 lg:py-24 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="z-10 text-center lg:text-left">
+                    <span class="inline-block px-4 py-1.5 bg-primary/10 text-primary text-sm font-bold rounded-full mb-6">NEW ARRIVALS 2024</span>
+                    <h1 class="text-5xl lg:text-7xl font-extrabold text-slate-900 dark:text-white leading-[1.1] mb-6">
+                        Your Pet's <br/><span class="text-primary">Happy Place</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 max-w-lg mx-auto lg:mx-0">
+                        Discover the best premium food, interactive toys, and professional care essentials for your furry best friends.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <button th:onclick="|window.location.href='@{/products}'|" class="px-8 py-4 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/25 cursor-pointer">Shop Now</button>
+                        <button class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-bold rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 transition-all">View Services</button>
+                    </div>
+                </div>
+                <div class="relative">
+                    <div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/5 rounded-full blur-3xl"></div>
+                    <div class="rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
+                        <img alt="Happy Dog" class="w-full h-full object-cover aspect-[4/3]" data-alt="A happy golden retriever dog smiling at the camera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZp3U2gd-_MIcxs6S22-ezhFu_ZkDwCKrdJ73nXHrlKTVqbqbvRxe1kF_63Htp6k5f6m6G0NJ-RJ1J9-guEYMZ0ZxbTKghoIdMSihHCIaxWGW9DLJKOTWvkjcYzZogiFZE_KdGfOsEhU_uil1FPNwH6Xe0Xa1FfqqAEnwWDAFhFZYRJyFwuPbl98h068AYwXTbUujm_UdjdXAhGdchDL-ukM-041eHj_c5vLcF87TFjeJvNXy1XgPi7hbB1oIrkPU4qPYGBsWk4w"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Featured Categories -->
+    <section class="py-16 bg-white dark:bg-slate-900/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Shop by Category</h2>
+                <p class="text-slate-500">Everything your pet needs to thrive and play</p>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Lặp qua danh sách categories từ Model -->
+                <div class="group cursor-pointer" th:each="category : ${categories}">
+                    <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2">
+                        <span class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white">category</span>
+                        <h3 class="font-bold text-lg group-hover:text-white" th:text="${category.name}">Category Name</h3>
+                        <p class="text-sm text-slate-500 group-hover:text-white/80" th:text="${category.description}">Description</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Best Sellers -->
+    <section class="py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-end justify-between mb-12">
+                <div>
+                    <h2 class="text-3xl font-bold mb-2">Best Sellers</h2>
+                    <p class="text-slate-500">Our most popular products this month</p>
+                </div>
+                <a class="text-primary font-bold flex items-center gap-2 hover:underline" th:href="@{/products}">
+                    View All Products
+                    <span class="material-symbols-outlined">arrow_forward</span>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Lặp qua danh sách bestSellers từ Model -->
+                <a class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all group block"
+                     th:each="product : ${bestSellers}"
+                     th:href="@{/products/{id}(id=${product.id})}">
+                    <div class="relative aspect-square overflow-hidden bg-slate-50">
+                        <img th:alt="${product.name}"
+                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                             th:src="${product.imageUrl}"
+                             src="https://via.placeholder.com/300"/>
+                        <div class="absolute top-3 right-3">
+                            <button class="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-slate-900 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-xl">favorite</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <!-- Hiển thị category name nếu có -->
+                        <p class="text-xs text-primary font-semibold mb-2"
+                           th:if="${product.categoryName != null}"
+                           th:text="${product.categoryName}">Category</p>
+                        <h3 class="font-bold text-slate-900 dark:text-white mb-1"
+                            th:text="${product.name}">Product Name</h3>
+                        <p class="text-sm text-slate-500 mb-4"
+                           th:text="${product.description != null ? #strings.abbreviate(product.description, 40) : ''}">Description</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold text-primary"
+                                  th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                            <span class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                                <span class="material-symbols-outlined">add_shopping_cart</span>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="py-16 bg-primary/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Happy Tails</h2>
+                <p class="text-slate-500">Read what our pet parents have to say</p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img alt="Sarah J." class="w-full h-full object-cover" data-alt="Close up portrait of a smiling woman" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEIKUPzUS43jwTqAlojN2lTEkCLEzjJ5tc0eu2hHQ-o9r6OV2A7X_szTRwisVGXL4UCOP8LKRythcJIOnwjZIbhew7rE_2ajykjU3kNc3x8qakbTiL-ntOuOvifs_3AGsDJpgMgCN2qVAyT2YXV6W6e-nIWP80OIn7tNXLhKs-z8Nq5VwRpj5POx4kvP-Gm4CJp891Tne0_jyL-sUzuj7Zg008ZNLJA1C7VYQUo02031bpCbUeOShhi9tY3Wc0b7oLt1RWC5x8tg"/>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Sarah J.</h4>
+                            <p class="text-xs text-slate-400">Owner of 2 Huskies</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">"The quality of the food here is unmatched. My boys have so much more energy and their coats are finally shining!"</p>
+                </div>
+                <!-- Testimonial 2 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img alt="Mark D." class="w-full h-full object-cover" data-alt="Portrait of a smiling man with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOb3LSp3YLMzUxgaWHwtxlFwbMOS2U7JL_0hvuPi1p7K31dKFHHHZ8k3cBJsgAgGMCkljao9-_TTi44VXr3Wny94rGhLnH7CvrqvY9LEdSVshid45deMRNZe717NNB-RFk54x7gISIBvlPkTRdTaRgq7N929fpqXXRji_g2fMtDkQOVeDc-v9ilM3JuIiZ0aY7iiCdUh5f-OiWem8lkakQXAR4sRWro3yATV5qSDjt4gkJxxddQ0vzuvEjw9mwfThheTTQacmUEQ"/>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Mark D.</h4>
+                            <p class="text-xs text-slate-400">Owner of Bella (Tabby)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">"Fast shipping and incredible customer service. The luxury cat tree we bought is Bella's new favorite kingdom."</p>
+                </div>
+                <!-- Testimonial 3 -->
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-2xl shadow-sm border border-primary/10">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-full overflow-hidden">
+                            <img alt="Elena R." class="w-full h-full object-cover" data-alt="Portrait of a young woman with a friendly smile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBdHQvA6sKET3Vtk93pdzIi42QQNf-hcIXLoG2eoXEVJIgn0CT9-6DTfZyWG0033FtddQ0X7E3aOti8ZNwWNvSbmNNNZnCfQkNY9od1opK9V0dZQJSDgzrWgz6wsNe3NUACKlXSL1pJ9eg8TX4lAvPAAQWP1OEezxVaxvbc8OM6d4PmoxBSRC1LJIWzuyJJmMPGjc2JpZ9Y48DuTArCt90P6xz1UbhviQ-JBV4nKQwAcr8Bl6jSzMq__ZOuVYDIhfo2oGhBbVp2Ow"/>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Elena R.</h4>
+                            <p class="text-xs text-slate-400">Owner of Cooper (Beagle)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 dark:text-slate-300 italic">"I love the curated health kits. It makes taking care of Cooper's wellness so much simpler and stress-free."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer Fragment -->
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body></html>
