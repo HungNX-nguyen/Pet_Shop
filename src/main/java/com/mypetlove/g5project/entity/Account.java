@@ -25,7 +25,7 @@ public class Account {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "full_Name", nullable = false)
+    @Column(name = "fullName", nullable = false)
     private String fullName;
 
     @Column(unique = true)
@@ -61,8 +61,8 @@ public class Account {
     @OneToMany(mappedBy = "creator")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "createdBy")
-    private List<ServiceEntity> serviceEntities;
+    @OneToMany(mappedBy = "creator")
+    private List<Service> services;
 
 
     @OneToMany(mappedBy = "customer")
