@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -41,7 +42,18 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler((request, response, authentication) -> {
+                            boolean isAdmin = authentication.getAuthorities().stream()
+                                    .map(GrantedAuthority::getAuthority)
+                                    .anyMatch(auth -> auth.equals("ROLE_SHOP_OWNER"));
+
+                            String contextPath = request.getContextPath();
+                            if (isAdmin) {
+                                response.sendRedirect(contextPath + "/admin/customers");
+                            } else {
+                                response.sendRedirect(contextPath + "/");
+                            }
+                        })
                         .failureUrl("/login?error")
                         .permitAll()
                 )
