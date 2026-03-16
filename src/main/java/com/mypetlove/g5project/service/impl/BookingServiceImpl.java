@@ -51,6 +51,9 @@ public class BookingServiceImpl implements IBookingService {
             throw new RuntimeException("Time slot " + dto.getTimeSlot() + " is already booked.");
         }
 
+        // Gộp pet info + note thành một string
+        String fullNote = buildNote(dto);
+
         String code = "PS-" + UUID.randomUUID().toString().substring(0, 5).toUpperCase();
 
         Booking booking = Booking.builder()
@@ -59,7 +62,7 @@ public class BookingServiceImpl implements IBookingService {
                 .timeSlot(dto.getTimeSlot())
                 .status("PENDING")
                 .totalPrice(service.getPrice())
-                .note(dto.getNote())
+                .note(fullNote)
                 .createdAt(LocalDateTime.now())
                 .customer(customer)
                 .build();
@@ -76,6 +79,26 @@ public class BookingServiceImpl implements IBookingService {
         log.info("Booking created [{}] for user [{}]", code, username);
         return toDto(saved, List.of(service));
     }
+
+    // Helper: gộp pet info
+    private String buildNote(BookingCreateDto dto) {
+        StringBuilder sb = new StringBuilder();
+        if (dto.getPetName()  != null && !dto.getPetName().isBlank())
+            sb.append("Pet: ").append(dto.getPetName());
+        if (dto.getPetBreed() != null && !dto.getPetBreed().isBlank())
+            sb.append(" (").append(dto.getPetBreed()).append(")");
+        if (dto.getPetAge()   != null)
+            sb.append(", Age: ").append(dto.getPetAge()).append("y");
+        if (dto.getPetWeight()!= null)
+            sb.append(", Weight: ").append(dto.getPetWeight()).append("kg");
+        if (dto.getNote()     != null && !dto.getNote().isBlank()) {
+            if (sb.length() > 0) sb.append(" | ");
+            sb.append(dto.getNote());
+        }
+        return sb.toString();
+    }
+
+
 
     // ------------------------------------------------------------------ //
     //  READ

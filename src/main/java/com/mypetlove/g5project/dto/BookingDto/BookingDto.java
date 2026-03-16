@@ -20,5 +20,15 @@ public class BookingDto {
     private BigDecimal totalPrice;
     private String note;
     private LocalDateTime createdAt;
+
+    private String customerName;
+    private String customerPhone;
+
+    // Pet info
+    private String petName;
+    private String petBreed;
+    private Integer petAge;
+    private Double petWeight;
+
     private List<ServiceDto> services;
 }

@@ -12,4 +12,15 @@ public class BookingCreateDto {
     private LocalDate bookingDate;
     private String timeSlot;
     private String note;
+
+    // Pet info
+    private String petName;
+    private String petBreed;
+    private Integer petAge;
+    private Double petWeight;
+
+    // Contact info (pre-filled từ account, có thể override)
+    private String contactName;
+    private String contactPhone;
+    private String contactEmail;
 }
