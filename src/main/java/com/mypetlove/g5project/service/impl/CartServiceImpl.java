@@ -1,7 +1,11 @@
 package com.mypetlove.g5project.service.impl;
 
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+// ✅ Fixed: dùng com.fasterxml.jackson (Jackson 2.x - chuẩn Spring Boot)
+// ❌ Đã xóa: tools.jackson.core.type.TypeReference (Jackson 3.x - không tương thích)
+// ❌ Đã xóa: tools.jackson.databind.ObjectMapper (Jackson 3.x - không tương thích)
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.mypetlove.g5project.dto.AddToCartDto;
 import com.mypetlove.g5project.dto.CartDetailDto;
 import com.mypetlove.g5project.dto.CartItemDto;
@@ -18,7 +22,6 @@ import com.mypetlove.g5project.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -271,5 +274,43 @@ public class CartServiceImpl implements CartService {
         return cartItemRepository.findByCartId(cartId).stream()
                 .mapToInt(CartItem::getQuantity)
                 .sum();
+    }
+
+    @Override
+    public int getCartTotalItems(String username) {
+        Cart cart = cartRepository.findByCustomer_Username(username).orElse(null);
+        if (cart == null) {
+            return 0;
+        }
+        return getCartTotalItems(cart.getId());
+    }
+
+    @Override
+    @Transactional
+    public void mergeCart(String cookieJson, String username) {
+        if (cookieJson == null || cookieJson.isBlank()) {
+            return;
+        }
+
+        List<AddToCartDto> cookieItems;
+        try {
+            cookieItems = objectMapper.readValue(cookieJson, new TypeReference<List<AddToCartDto>>() {});
+        } catch (Exception e) {
+            return;
+        }
+
+        if (cookieItems == null || cookieItems.isEmpty()) {
+            return;
+        }
+
+        for (AddToCartDto item : cookieItems) {
+            try {
+                if (productRepository.existsById(item.getProductId())) {
+                    addToCart(item, username);
+                }
+            } catch (Exception e) {
+                // Ignore failure for individual items during merge
+            }
+        }
     }
 }

@@ -128,4 +128,26 @@ public class CartApiController {
                     .build());
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<CartResponseDto> getCartCount(Authentication authentication) {
+        if (isGuest(authentication)) {
+            return ResponseEntity.ok(CartResponseDto.builder().status("success").message("OK").totalItems(0).build());
+        }
+
+        try {
+            int totalItems = cartService.getCartTotalItems(authentication.getName());
+            return ResponseEntity.ok(CartResponseDto.builder()
+                    .status("success")
+                    .message("OK")
+                    .totalItems(totalItems)
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(CartResponseDto.builder()
+                    .status("error")
+                    .message(e.getMessage())
+                    .totalItems(0)
+                    .build());
+        }
+    }
 }

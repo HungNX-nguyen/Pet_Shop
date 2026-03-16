@@ -12,4 +12,6 @@ public interface CartService {
     CartResponseDto updateCartItemByProduct(Integer productId, Integer quantity, String username);
     CartResponseDto removeCartItemByProduct(Integer productId, String username);
     CartDetailDto getCartDetailsFromCookie(String cookieJson);
+    void mergeCart(String cookieJson, String username);
+    int getCartTotalItems(String username);
 }

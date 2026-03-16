@@ -1,3 +1,12 @@
+// ===== Context Path (lấy động từ meta tag, không hardcode) =====
+var CONTEXT_PATH = document.querySelector('meta[name="context-path"]')?.content?.replace(/\/$/, '') || '';
+
+// ===== Auth Helpers =====
+
+function isAuthenticated() {
+    return document.getElementById('auth-status') !== null;
+}
+
 // ===== Cookie Helpers =====
 
 function getCartFromCookie() {
@@ -37,13 +46,31 @@ function buildHeaders(isJson) {
 // ===== Badge =====
 
 function updateCartBadge() {
-    var cart = getCartFromCookie();
-    var total = 0;
-    for (var i = 0; i < cart.length; i++) {
-        total += (cart[i].quantity || 0);
-    }
     var badge = document.getElementById('cart-badge');
-    if (badge) {
+    if (!badge) return;
+
+    if (isAuthenticated()) {
+        fetch(CONTEXT_PATH + '/api/cart/count', {
+            method: 'GET',
+            headers: buildHeaders(false)
+        })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                var total = data.totalItems || 0;
+                badge.textContent = total;
+                if (total > 0) {
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            })
+            .catch(function() {});
+    } else {
+        var cart = getCartFromCookie();
+        var total = 0;
+        for (var i = 0; i < cart.length; i++) {
+            total += (cart[i].quantity || 0);
+        }
         badge.textContent = total;
         if (total > 0) {
             badge.classList.remove('hidden');
@@ -93,27 +120,42 @@ function addToCart(productId, quantity) {
     quantity = parseInt(quantity) || 1;
     productId = parseInt(productId);
 
-    var cart = getCartFromCookie();
-    var found = false;
-    for (var i = 0; i < cart.length; i++) {
-        if (cart[i].productId === productId) {
-            cart[i].quantity += quantity;
-            found = true;
-            break;
+    if (!isAuthenticated()) {
+        var cart = getCartFromCookie();
+        var found = false;
+        for (var i = 0; i < cart.length; i++) {
+            if (cart[i].productId === productId) {
+                cart[i].quantity += quantity;
+                found = true;
+                break;
+            }
         }
+        if (!found) {
+            cart.push({ productId: productId, quantity: quantity });
+        }
+        saveCartToCookie(cart);
+        updateCartBadge();
+        showToast('Đã thêm vào giỏ hàng', 'success');
+        // ✅ Không gọi API thừa với guest nữa
+    } else {
+        fetch(CONTEXT_PATH + '/api/cart/add', {
+            method: 'POST',
+            headers: buildHeaders(true),
+            body: JSON.stringify({ productId: productId, quantity: quantity })
+        })
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.status === 'success') {
+                    showToast('Đã thêm vào giỏ hàng', 'success');
+                    updateCartBadge();
+                } else {
+                    showToast(data.message || 'Lỗi khi thêm vào giỏ hàng', 'error');
+                }
+            })
+            .catch(function() {
+                showToast('Lỗi kết nối', 'error');
+            });
     }
-    if (!found) {
-        cart.push({ productId: productId, quantity: quantity });
-    }
-    saveCartToCookie(cart);
-    updateCartBadge();
-    showToast('Đã thêm vào giỏ hàng', 'success');
-
-    fetch('/api/cart/add', {
-        method: 'POST',
-        headers: buildHeaders(true),
-        body: JSON.stringify({ productId: productId, quantity: quantity })
-    }).catch(function() {});
 }
 
 function updateCartItem(productId, newQuantity) {
@@ -125,22 +167,30 @@ function updateCartItem(productId, newQuantity) {
         return;
     }
 
-    var cart = getCartFromCookie();
-    for (var i = 0; i < cart.length; i++) {
-        if (cart[i].productId === productId) {
-            cart[i].quantity = newQuantity;
-            break;
+    if (!isAuthenticated()) {
+        var cart = getCartFromCookie();
+        for (var i = 0; i < cart.length; i++) {
+            if (cart[i].productId === productId) {
+                cart[i].quantity = newQuantity;
+                break;
+            }
         }
+        saveCartToCookie(cart);
+        updateCartBadge();
+        fetch(CONTEXT_PATH + '/api/cart/update-product?productId=' + productId + '&quantity=' + newQuantity, {
+            method: 'PUT',
+            headers: buildHeaders(false)
+        }).finally(function() {
+            window.location.reload();
+        });
+    } else {
+        fetch(CONTEXT_PATH + '/api/cart/update-product?productId=' + productId + '&quantity=' + newQuantity, {
+            method: 'PUT',
+            headers: buildHeaders(false)
+        }).finally(function() {
+            window.location.reload();
+        });
     }
-    saveCartToCookie(cart);
-    updateCartBadge();
-
-    fetch('/api/cart/update-product?productId=' + productId + '&quantity=' + newQuantity, {
-        method: 'PUT',
-        headers: buildHeaders(false)
-    }).finally(function() {
-        window.location.reload();
-    });
 }
 
 function removeCartItem(productId) {
@@ -150,17 +200,26 @@ function removeCartItem(productId) {
         return;
     }
 
-    var cart = getCartFromCookie();
-    cart = cart.filter(function(item) { return item.productId !== productId; });
-    saveCartToCookie(cart);
-    updateCartBadge();
+    if (!isAuthenticated()) {
+        var cart = getCartFromCookie();
+        cart = cart.filter(function(item) { return item.productId !== productId; });
+        saveCartToCookie(cart);
+        updateCartBadge();
 
-    fetch('/api/cart/remove-product/' + productId, {
-        method: 'DELETE',
-        headers: buildHeaders(false)
-    }).finally(function() {
-        window.location.reload();
-    });
+        fetch(CONTEXT_PATH + '/api/cart/remove-product/' + productId, {
+            method: 'DELETE',
+            headers: buildHeaders(false)
+        }).finally(function() {
+            window.location.reload();
+        });
+    } else {
+        fetch(CONTEXT_PATH + '/api/cart/remove-product/' + productId, {
+            method: 'DELETE',
+            headers: buildHeaders(false)
+        }).finally(function() {
+            window.location.reload();
+        });
+    }
 }
 
 // ===== Init: update badge on every page load =====

@@ -9,10 +9,13 @@
 <main class="max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-12">
     <h2 class="text-4xl font-black mb-10 tracking-tight">Shopping Cart</h2>
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+
         <!-- Items List -->
         <div class="lg:col-span-2 space-y-8">
+
             <!-- Empty cart -->
-            <div th:if="${#lists.isEmpty(cart.items)}" class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+            <div th:if="${#lists.isEmpty(cart.items)}"
+                 class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
                 <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">shopping_cart</span>
                 <p class="text-xl font-bold text-slate-500 mb-4">Giỏ hàng của bạn đang trống</p>
                 <a th:href="@{/products}" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
@@ -20,25 +23,59 @@
                     Tiếp tục mua sắm
                 </a>
             </div>
-            
+
+            <!-- Select All -->
+            <div th:if="${!#lists.isEmpty(cart.items)}"
+                 class="flex items-center gap-3 px-2">
+                <input type="checkbox" id="select-all"
+                       class="w-5 h-5 rounded accent-primary cursor-pointer"
+                       onchange="toggleSelectAll(this.checked)"/>
+                <label for="select-all" class="font-semibold cursor-pointer select-none">Chọn tất cả</label>
+            </div>
+
             <!-- Cart items -->
-            <div th:each="item : ${cart.items}" th:id="'cart-item-' + ${item.productId}" class="flex flex-col sm:flex-row items-center gap-6 p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300">
+            <div th:each="item : ${cart.items}"
+                 th:id="'cart-item-' + ${item.productId}"
+                 class="flex flex-col sm:flex-row items-center gap-6 p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300">
+
+                <!-- Checkbox -->
+                <input type="checkbox"
+                       th:id="'check-' + ${item.productId}"
+                       th:value="${item.productId}"
+                       th:attr="data-price=${item.totalPrice}"
+                       class="cart-item-checkbox w-5 h-5 rounded accent-primary cursor-pointer flex-shrink-0"
+                       onchange="recalculateTotal()"/>
+
+                <!-- Product Image -->
                 <div class="w-32 h-32 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
-                    <img th:src="@{${item.imageUrl != null and item.imageUrl.startsWith('http') ? item.imageUrl : '/' + item.imageUrl}}" th:alt="${item.productName}" class="w-full h-full object-cover"/>
+                    <img th:src="@{${item.imageUrl != null and item.imageUrl.startsWith('http') ? item.imageUrl : '/' + item.imageUrl}}"
+                         th:alt="${item.productName}"
+                         class="w-full h-full object-cover"/>
                 </div>
+
+                <!-- Product Info -->
                 <div class="flex-1 space-y-1 w-full">
                     <h3 class="text-xl font-bold" th:text="${item.productName}">Product Name</h3>
                     <p class="text-slate-500 text-sm" th:text="${item.productCategory}">Category</p>
                     <div class="pt-4 flex items-center justify-between sm:justify-start sm:gap-12">
+                        <!-- Quantity controls -->
                         <div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
-                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} - 1) + ')'" class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">-</button>
-                            <span th:id="'quantity-' + ${item.productId}" class="font-bold w-6 text-center" th:text="${item.quantity}">1</span>
-                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} + 1) + ')'" class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">+</button>
+                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} - 1) + ')'"
+                                    class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">-</button>
+                            <span th:id="'quantity-' + ${item.productId}"
+                                  class="font-bold w-6 text-center"
+                                  th:text="${item.quantity}">1</span>
+                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} + 1) + ')'"
+                                    class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">+</button>
                         </div>
-                        <span class="text-xl font-black text-primary" th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                        <span class="text-xl font-black text-primary"
+                              th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
                     </div>
                 </div>
-                <button th:onclick="'removeCartItem(' + ${item.productId} + ')'" class="p-2 text-slate-400 hover:text-primary transition-colors self-start sm:self-center">
+
+                <!-- Delete button -->
+                <button th:onclick="'removeCartItem(' + ${item.productId} + ')'"
+                        class="p-2 text-slate-400 hover:text-primary transition-colors self-start sm:self-center">
                     <span class="material-symbols-outlined">delete</span>
                 </button>
             </div>
@@ -50,49 +87,64 @@
                 </a>
             </div>
         </div>
-        
-        <!-- Cart Summary -->
+
+        <!-- Order Summary -->
         <div th:if="${!#lists.isEmpty(cart.items)}" class="space-y-6">
             <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-lg border border-slate-100 dark:border-slate-800 sticky top-28">
                 <h3 class="text-2xl font-bold mb-6">Order Summary</h3>
+
                 <div class="space-y-4 text-slate-600 dark:text-slate-400 mb-8">
                     <div class="flex justify-between">
                         <span>Subtotal</span>
-                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.subtotal, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                        <span id="summary-subtotal" class="font-bold text-slate-900 dark:text-slate-100">0 VNĐ</span>
                     </div>
                     <div class="flex justify-between">
                         <span>Shipping (Estimated)</span>
-                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.shipping, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                        <span id="summary-shipping" class="font-bold text-slate-900 dark:text-slate-100">0 VNĐ</span>
                     </div>
                     <div class="flex justify-between">
-                        <span>Tax</span>
-                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.tax, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                        <span>Tax (5%)</span>
+                        <span id="summary-tax" class="font-bold text-slate-900 dark:text-slate-100">0 VNĐ</span>
                     </div>
                     <div class="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-between">
                         <span class="text-lg font-bold text-slate-900 dark:text-slate-100">Total</span>
-                        <span class="text-2xl font-black text-primary" th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                        <span id="summary-total" class="text-2xl font-black text-primary">0 VNĐ</span>
                     </div>
                 </div>
-                <button class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/20 shadow-primary/10 flex items-center justify-center gap-2">
+
+                <!-- Payment method selection -->
+                <div class="mb-6 space-y-3">
+                    <p class="font-semibold text-slate-700 dark:text-slate-300">Phương thức thanh toán</p>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="payment-method" value="COD" checked
+                               class="accent-primary w-4 h-4"/>
+                        <span class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-slate-500">local_shipping</span>
+                            Thanh toán khi nhận hàng (COD)
+                        </span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="radio" name="payment-method" value="ONLINE"
+                               class="accent-primary w-4 h-4"/>
+                        <span class="flex items-center gap-2">
+                            <span class="material-symbols-outlined text-slate-500">credit_card</span>
+                            Thanh toán online
+                        </span>
+                    </label>
+                </div>
+
+                <!-- Checkout button -->
+                <button id="checkout-btn"
+                        onclick="proceedCheckout()"
+                        disabled
+                        class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/20 shadow-primary/10 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     Proceed to Checkout
                     <span class="material-symbols-outlined">shopping_cart_checkout</span>
                 </button>
-            </div>
-            
-            <!-- Trusted Badges -->
-            <div class="grid grid-cols-3 gap-4 text-center py-4 opacity-60">
-                <div class="space-y-1">
-                    <span class="material-symbols-outlined text-primary">verified_user</span>
-                    <p class="text-[10px] font-bold uppercase tracking-widest">Secure Pay</p>
-                </div>
-                <div class="space-y-1">
-                    <span class="material-symbols-outlined text-primary">local_shipping</span>
-                    <p class="text-[10px] font-bold uppercase tracking-widest">Fast Delivery</p>
-                </div>
-                <div class="space-y-1">
-                    <span class="material-symbols-outlined text-primary">cycle</span>
-                    <p class="text-[10px] font-bold uppercase tracking-widest">Easy Return</p>
-                </div>
+
+                <p id="checkout-warning" class="text-center text-sm text-slate-400 mt-3 hidden">
+                    Vui lòng chọn ít nhất một sản phẩm
+                </p>
             </div>
         </div>
     </div>
@@ -100,5 +152,7 @@
 
 <footer th:replace="~{fragment/footer :: footer}"></footer>
 
+<script th:src="@{/js/cart.js}"></script>
+<script th:src="@{/js/cartdetail.js}"></script>
 </body>
 </html>

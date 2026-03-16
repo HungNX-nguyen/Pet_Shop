@@ -30,6 +30,9 @@ public class Order {
 
     private String status;
 
+    @Column(name = "shipping_address")
+    private String shippingAddress;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;

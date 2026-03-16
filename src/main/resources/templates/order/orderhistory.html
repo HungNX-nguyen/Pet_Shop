@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Order History - PetCare</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-slate-50 dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+        <!-- Header Fragment -->
+        <div th:replace="~{fragment/header :: header}"></div>
+        <main class="flex flex-1 flex-col lg:flex-row max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 gap-8">
+            <!-- Sidebar Fragment -->
+            <aside class="w-full lg:w-64 flex flex-col gap-6">
+                <div class="flex flex-col">
+                    <h1 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-normal">My Account</h1>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm font-normal">Manage your orders and profile</p>
+                </div>
+                <nav class="flex flex-col gap-1">
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-primary/5 transition-colors" th:href="@{/profile}">
+                        <span class="material-symbols-outlined">person</span>
+                        <p class="text-sm font-medium">Profile Info</p>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary" th:href="@{/orders}">
+                        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">history</span>
+                        <p class="text-sm font-bold">Order History</p>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-primary/5 transition-colors" href="#">
+                        <span class="material-symbols-outlined">location_on</span>
+                        <p class="text-sm font-medium">Addresses</p>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-primary/5 transition-colors" href="#">
+                        <span class="material-symbols-outlined">favorite</span>
+                        <p class="text-sm font-medium">Wishlist</p>
+                    </a>
+                    <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-primary/5 transition-colors" href="#">
+                        <span class="material-symbols-outlined">settings</span>
+                        <p class="text-sm font-medium">Settings</p>
+                    </a>
+                </nav>
+            </aside>
+            <!-- Main Content Area -->
+            <div class="flex-1 flex flex-col gap-6">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+                    <div>
+                        <h2 class="text-slate-900 dark:text-slate-100 text-2xl font-bold">Recent Orders</h2>
+                        <p class="text-slate-500 dark:text-slate-400 text-sm">Manage and track your recent pet supplies orders.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 px-4 py-2 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800">
+                            <span class="material-symbols-outlined text-[18px]">filter_list</span>
+                            Filter
+                        </button>
+                    </div>
+                </div>
+                <!-- Orders Table Container -->
+                <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-background-dark shadow-sm">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                        <tr class="bg-slate-50 dark:bg-slate-800/50">
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Order ID</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Date</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Status</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total</th>
+                            <th class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 text-right">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <!-- Dynamic Order Rows -->
+                        <tr th:if="${orders == null or orders.isEmpty()}" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td colspan="5" class="px-6 py-12 text-center">
+                                <div class="flex flex-col items-center gap-3">
+                                    <span class="material-symbols-outlined text-slate-300 dark:text-slate-600 text-5xl">receipt_long</span>
+                                    <p class="text-slate-500 dark:text-slate-400 text-sm">No orders found</p>
+                                    <a th:href="@{/products}" class="text-primary hover:text-primary/80 font-bold text-sm">Start Shopping</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:each="order : ${orders}" class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td class="px-6 py-5">
+                                <span class="font-bold text-slate-900 dark:text-slate-100" th:text="'#' + ${order.orderCode}">#12345</span>
+                            </td>
+                            <td class="px-6 py-5 text-slate-600 dark:text-slate-400 text-sm" th:text="${#temporals.format(order.createdAt, 'MMM dd, yyyy')}">Oct 24, 2023</td>
+                            <td class="px-6 py-5">
+                                <!-- Status: DELIVERED -->
+                                <span th:if="${order.status == 'DELIVERED'}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                    Delivered
+                                </span>
+                                <!-- Status: PENDING -->
+                                <span th:if="${order.status == 'PENDING' or order.status == 'WAITING_PAYMENT'}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[14px]">schedule</span>
+                                    Pending
+                                </span>
+                                <!-- Status: PROCESSING -->
+                                <span th:if="${order.status == 'PROCESSING' or order.status == 'CONFIRMED'}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[14px]">local_shipping</span>
+                                    Processing
+                                </span>
+                                <!-- Status: CANCELLED -->
+                                <span th:if="${order.status == 'CANCELLED'}" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-semibold">
+                                    <span class="material-symbols-outlined text-[14px]">cancel</span>
+                                    Cancelled
+                                </span>
+                            </td>
+                            <td class="px-6 py-5 text-slate-900 dark:text-slate-100 font-medium" th:text="'$' + ${#numbers.formatDecimal(order.totalAmount, 1, 2)}">$85.00</td>
+                            <td class="px-6 py-5 text-right">
+                                <a th:href="@{/orders/{id}(id=${order.id})}" class="text-primary hover:text-primary/80 font-bold text-sm">View Details</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div th:if="${orders != null and !orders.isEmpty()}" class="flex items-center justify-center gap-2 pt-4">
+                    <a th:if="${currentPage > 0}" 
+                       th:href="@{/orders(page=${currentPage - 1})}"
+                       class="flex items-center justify-center size-10 rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </a>
+                    <button th:if="${currentPage == 0}" disabled
+                            class="flex items-center justify-center size-10 rounded-full border border-slate-200 dark:border-slate-800 opacity-50 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+                    </button>
+                    
+                    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+                        <a th:if="${i == currentPage}"
+                           class="flex items-center justify-center size-10 rounded-full bg-primary text-white font-bold text-sm"
+                           th:text="${i + 1}">1</a>
+                        <a th:if="${i != currentPage}"
+                           th:href="@{/orders(page=${i})}"
+                           class="flex items-center justify-center size-10 rounded-full text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                           th:text="${i + 1}">2</a>
+                    </span>
+                    
+                    <a th:if="${currentPage < totalPages - 1}"
+                       th:href="@{/orders(page=${currentPage + 1})}"
+                       class="flex items-center justify-center size-10 rounded-full border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </a>
+                    <button th:if="${currentPage >= totalPages - 1}" disabled
+                            class="flex items-center justify-center size-10 rounded-full border border-slate-200 dark:border-slate-800 opacity-50 cursor-not-allowed">
+                        <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+        <div th:replace="~{fragment/footer :: footer}"></div>
+    </div>
+</div>
+</body></html>

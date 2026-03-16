@@ -34,6 +34,7 @@
 
                 <!-- Khi đã đăng nhập: avatar + dropdown -->
                 <div sec:authorize="isAuthenticated()" class="relative" id="userMenuWrapper">
+                    <span id="auth-status" style="display:none"></span>
                     <!-- Avatar button -->
                     <button type="button"
                             id="userMenuBtn"
