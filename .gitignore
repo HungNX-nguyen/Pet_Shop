@@ -31,6 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-# Bỏ qua file chứa mật khẩu Database
-src/main/resources/application.yaml

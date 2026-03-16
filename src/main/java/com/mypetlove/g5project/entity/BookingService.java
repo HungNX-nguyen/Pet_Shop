@@ -18,11 +18,11 @@ public class BookingService {
 
     @ManyToOne
     @MapsId("bookingId")
-    @JoinColumn(name = "booking_id")
+    @JoinColumn(name = "bookingId")
     private Booking booking;
 
     @ManyToOne
     @MapsId("serviceId")
-    @JoinColumn(name = "service_id")
+    @JoinColumn(name = "serviceId")
     private Service service;
 }

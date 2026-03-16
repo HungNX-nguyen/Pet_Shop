@@ -21,10 +21,8 @@ public class OrderItem {
 
     private Integer quantity;
 
-    @Column(name = "unit_price")
     private BigDecimal unitPrice;
 
-    @Column(name = "sub_total")
     private BigDecimal subTotal;
 
     @ManyToOne
