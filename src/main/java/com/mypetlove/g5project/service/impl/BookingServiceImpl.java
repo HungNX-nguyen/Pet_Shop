@@ -92,7 +92,7 @@ public class BookingServiceImpl implements IBookingService {
         Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Account not found: " + username));
 
-        return bookingRepository.findByCustomer_AccountID(account.getAccountID())
+        return bookingRepository.findByCustomer_AccountId(account.getAccountId())
                 .stream()
                 .map(b -> {
                     List<Service> services = extractServices(b);

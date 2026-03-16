@@ -212,6 +212,7 @@ public class OrderServiceImpl implements OrderService {
         // ✅ Map String tab → List<Order.OrderStatus> enum
         List<Order.OrderStatus> dbStatuses = switch (status.toUpperCase()) {
             case "PENDING"    -> List.of(Order.OrderStatus.WAITING_PAYMENT);
+            case "PAID"       -> List.of(Order.OrderStatus.PAID);
             case "PROCESSING" -> List.of(Order.OrderStatus.PROCESSING, Order.OrderStatus.CONFIRMED);
             case "SHIPPING"   -> List.of(Order.OrderStatus.SHIPPING);
             case "SUCCESS"    -> List.of(Order.OrderStatus.DELIVERED);

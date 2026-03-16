@@ -43,13 +43,15 @@
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Lặp qua danh sách categories từ Model -->
-                <div class="group cursor-pointer" th:each="category : ${categories}">
+                <a th:href="@{/products(categoryId=${category.id})}" 
+                   class="group cursor-pointer block" 
+                   th:each="category : ${categories}">
                     <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2">
                         <span class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white">category</span>
                         <h3 class="font-bold text-lg group-hover:text-white" th:text="${category.name}">Category Name</h3>
                         <p class="text-sm text-slate-500 group-hover:text-white/80" th:text="${category.description}">Description</p>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>

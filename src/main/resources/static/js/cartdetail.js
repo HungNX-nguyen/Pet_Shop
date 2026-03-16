@@ -25,13 +25,22 @@ var SHIPPING_FEE = 5.99;
     // Enable/disable checkout button
     var checkoutBtn = document.getElementById('checkout-btn');
     var warning = document.getElementById('checkout-warning');
-    if (checkboxes.length > 0) {
-    checkoutBtn.disabled = false;
-    warning.classList.add('hidden');
-} else {
-    checkoutBtn.disabled = true;
-    warning.classList.remove('hidden');
-}
+    
+    // Check if user is authenticated
+    var isAuth = isAuthenticated();
+    
+    if (!isAuth) {
+        checkoutBtn.disabled = true;
+        warning.textContent = 'Vui lòng đăng nhập để thanh toán';
+        warning.classList.remove('hidden');
+    } else if (checkboxes.length > 0) {
+        checkoutBtn.disabled = false;
+        warning.classList.add('hidden');
+    } else {
+        checkoutBtn.disabled = true;
+        warning.textContent = 'Vui lòng chọn ít nhất một sản phẩm';
+        warning.classList.remove('hidden');
+    }
 
     // Sync select-all checkbox
     var allCheckboxes = document.querySelectorAll('.cart-item-checkbox');
@@ -50,6 +59,15 @@ var SHIPPING_FEE = 5.99;
 }
 
     function proceedCheckout() {
+    // Check authentication first
+    if (!isAuthenticated()) {
+        showToast('Vui lòng đăng nhập để thanh toán', 'error');
+        setTimeout(function() {
+            window.location.href = CONTEXT_PATH + '/login';
+        }, 1500);
+        return;
+    }
+    
     var selectedIds = [];
     document.querySelectorAll('.cart-item-checkbox:checked').forEach(function(cb) {
     selectedIds.push(parseInt(cb.value));
