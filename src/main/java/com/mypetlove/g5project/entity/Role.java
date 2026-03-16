@@ -17,9 +17,10 @@ import java.util.List;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "roleId")
     private Integer roleId;
 
-
+    @Column(name = "role_name")
     private String roleName;
 
     @OneToMany(mappedBy = "role")

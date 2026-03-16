@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: head(|PetCare - Shop|)}">
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<!-- Header Fragment -->
+<header th:replace="~{fragment/header :: header}"></header>
+
+<main class="max-w-7xl mx-auto w-full px-4 md:px-10 py-8">
+    <!-- Breadcrumbs & Title -->
+    <div class="mb-8">
+        <nav class="flex gap-2 text-sm text-slate-500 mb-2">
+            <a class="hover:text-primary" th:href="@{/}">Home</a>
+            <span>/</span>
+            <span class="text-slate-900 dark:text-slate-100 font-medium">Shop</span>
+        </nav>
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+                <h1 class="text-4xl font-black tracking-tight mb-2">Pet Supplies</h1>
+                <p class="text-slate-500">Discover premium products for your beloved companions.</p>
+            </div>
+        </div>
+        <!-- Active filter info -->
+        <div class="mt-4 flex flex-wrap items-center gap-2">
+            <!-- Keyword badge -->
+            <span th:if="${keyword != null and !keyword.isEmpty()}"
+                  class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                <span class="material-symbols-outlined text-sm">search</span>
+                "<span th:text="${keyword}"></span>"
+                <a th:href="@{/products(categoryId=${categoryId})}"
+                   class="ml-1 hover:text-red-500 transition-colors">
+                    <span class="material-symbols-outlined text-sm">close</span>
+                </a>
+            </span>
+            <!-- Category badge -->
+            <th:block th:if="${categoryId != null}">
+                <span th:each="cat : ${categories}" th:if="${cat.id == categoryId}"
+                      class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                    <span class="material-symbols-outlined text-sm">category</span>
+                    <span th:text="${cat.name}"></span>
+                    <a th:href="@{/products(keyword=${keyword})}"
+                       class="ml-1 hover:text-red-500 transition-colors">
+                        <span class="material-symbols-outlined text-sm">close</span>
+                    </a>
+                </span>
+            </th:block>
+            <!-- Clear all -->
+            <a th:if="${(keyword != null and !keyword.isEmpty()) or categoryId != null}"
+               th:href="@{/products}"
+               class="text-xs text-slate-400 hover:text-primary underline transition-colors">
+                Clear all filters
+            </a>
+            <!-- Result count -->
+            <span th:if="${(keyword != null and !keyword.isEmpty()) or categoryId != null}"
+                  class="text-sm text-slate-400 ml-auto">
+                <span th:text="${productPage.totalElements}">0</span> products found
+            </span>
+        </div>
+    </div>
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Sidebar Filters -->
+        <aside class="w-full lg:w-64 shrink-0 space-y-8">
+            <!-- Categories -->
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Categories</h3>
+                <div class="space-y-1">
+                    <!-- Nút "All" -->
+                    <a th:href="@{/products(keyword=${keyword})}"
+                       th:classappend="${categoryId == null} ? 'bg-primary text-white' : 'hover:bg-primary/5'"
+                       class="flex w-full items-center gap-3 px-3 py-2 rounded-lg transition-colors font-medium">
+                        <span class="material-symbols-outlined text-xl">apps</span>
+                        <span class="text-sm">All</span>
+                    </a>
+                    <!-- Lặp qua danh sách categories -->
+                    <a th:each="category : ${categories}"
+                       th:href="@{/products(categoryId=${category.id}, keyword=${keyword})}"
+                       th:classappend="${categoryId != null and categoryId == category.id} ? 'bg-primary text-white' : 'hover:bg-primary/5'"
+                       class="flex w-full items-center gap-3 px-3 py-2 rounded-lg transition-colors">
+                        <span class="material-symbols-outlined text-xl">category</span>
+                        <span class="text-sm" th:text="${category.name}">Category Name</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Price Range -->
+            <div>
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Price Range</h3>
+                <div class="px-2">
+                    <div class="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full relative">
+                        <div class="absolute left-0 right-1/4 h-full bg-primary rounded-full"></div>
+                        <div class="absolute left-0 top-1/2 -translate-y-1/2 size-4 bg-white border-2 border-primary rounded-full cursor-pointer shadow-sm"></div>
+                        <div class="absolute right-1/4 top-1/2 -translate-y-1/2 size-4 bg-white border-2 border-primary rounded-full cursor-pointer shadow-sm"></div>
+                    </div>
+                    <div class="flex justify-between mt-4 text-xs font-bold text-slate-600 dark:text-slate-400 uppercase">
+                        <span>0 VNĐ</span>
+                        <span>5,000,000+ VNĐ</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <!-- Product Grid -->
+        <div class="flex-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Lặp qua danh sách products từ Model -->
+                <div class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-100 dark:border-slate-700 hover:shadow-xl transition-all duration-300"
+                     th:each="product : ${products}">
+                    <a th:href="@{/products/{id}(id=${product.id})}" class="block">
+                        <div class="aspect-square relative overflow-hidden bg-primary/5">
+                            <img th:alt="${product.name}"
+                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                 th:src="@{${product.imageUrl != null and product.imageUrl.startsWith('http') ? product.imageUrl : '/' + product.imageUrl}}"
+                                 src="https://via.placeholder.com/300"/>
+                            <span class="absolute top-3 right-3 p-2 rounded-full bg-white/90 shadow-sm text-slate-400 hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined">favorite</span>
+                            </span>
+                        </div>
+                    </a>
+                    <div class="p-5">
+                        <p class="text-xs text-primary font-semibold mb-2"
+                           th:if="${product.categoryName != null}"
+                           th:text="${product.categoryName}">Category</p>
+                        <a th:href="@{/products/{id}(id=${product.id})}" class="block">
+                            <h3 class="font-bold text-slate-900 dark:text-slate-100 mb-1 group-hover:text-primary transition-colors"
+                                th:text="${product.name}">Product Name</h3>
+                        </a>
+                        <p class="text-slate-500 text-xs mb-4"
+                           th:text="${product.description != null ? #strings.abbreviate(product.description, 60) : ''}">Description</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-black text-slate-900 dark:text-slate-100"
+                                  th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                            <button type="button"
+                                    th:onclick="'addToCart(' + ${product.id} + ');'"
+                                    class="p-2 rounded-lg bg-primary text-white hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">
+                                <span class="material-symbols-outlined">add_shopping_cart</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông báo nếu không có sản phẩm -->
+            <div th:if="${#lists.isEmpty(products)}" class="text-center py-20">
+                <span class="material-symbols-outlined text-6xl text-slate-300 block mb-4">inventory_2</span>
+                <p class="text-slate-500 text-lg">No products found.</p>
+            </div>
+
+            <!-- Pagination -->
+            <div th:if="${productPage.totalPages > 1}" class="mt-12 flex items-center justify-center gap-2">
+                <!-- Previous Button -->
+                <a th:if="${!productPage.first}"
+                   th:href="@{/products(page=${currentPage - 1}, keyword=${keyword}, categoryId=${categoryId})}"
+                   class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </a>
+                <span th:if="${productPage.first}"
+                      class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-300 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_left</span>
+                </span>
+
+                <!--
+                    Pagination logic:
+                    - totalPages <= 3: hiển thị tất cả
+                    - totalPages >= 4: rút gọn, luôn hiện trang 1, trang cuối, trang hiện tại + liền kề
+                    - "..." khi có khoảng trống bị ẩn
+
+                    Điều kiện hiển thị 1 trang (i):
+                      showPage = totalPages <= 3
+                                 OR i == 0
+                                 OR i == totalPages - 1
+                                 OR (i >= currentPage - 1 AND i <= currentPage + 1)
+
+                    Điều kiện hiển thị "..." sau trang i:
+                      Trang i được hiển thị VÀ trang i+1 KHÔNG được hiển thị
+                -->
+                <th:block th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}">
+
+                    <!-- Kiểm tra trang này có nên hiển thị không -->
+                    <th:block th:if="${productPage.totalPages <= 3
+                                      or i == 0
+                                      or i == productPage.totalPages - 1
+                                      or (i >= currentPage - 1 and i <= currentPage + 1)}">
+
+                        <!-- Trang hiện tại (active) -->
+                        <span th:if="${i == currentPage}"
+                              th:text="${i + 1}"
+                              class="size-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">
+                        </span>
+
+                        <!-- Trang khác (link) -->
+                        <a th:if="${i != currentPage}"
+                           th:href="@{/products(page=${i}, keyword=${keyword}, categoryId=${categoryId})}"
+                           th:text="${i + 1}"
+                           class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-primary/5 transition-colors font-bold">
+                        </a>
+                    </th:block>
+
+                    <!--
+                        "..." hiển thị khi:
+                        - Trang i ĐƯỢC hiển thị (theo điều kiện trên)
+                        - Trang i+1 KHÔNG được hiển thị (tức là có khoảng trống)
+                        - totalPages >= 4
+                    -->
+                    <span th:if="${productPage.totalPages >= 4
+                                   and (i == 0 or i == productPage.totalPages - 1 or (i >= currentPage - 1 and i <= currentPage + 1))
+                                   and (i + 1 < productPage.totalPages)
+                                   and not (i + 1 == 0 or i + 1 == productPage.totalPages - 1 or (i + 1 >= currentPage - 1 and i + 1 <= currentPage + 1))}"
+                          class="mx-1 text-slate-400 font-bold">...</span>
+
+                </th:block>
+
+                <!-- Next Button -->
+                <a th:if="${!productPage.last}"
+                   th:href="@{/products(page=${currentPage + 1}, keyword=${keyword}, categoryId=${categoryId})}"
+                   class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-primary/5 transition-colors">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </a>
+                <span th:if="${productPage.last}"
+                      class="size-10 flex items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 text-slate-300 cursor-not-allowed">
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </span>
+            </div>
+
+            <!-- Page Info -->
+            <div th:if="${productPage.totalPages > 1}" class="mt-4 text-center text-sm text-slate-400">
+                Page <span th:text="${currentPage + 1}">1</span> of <span th:text="${productPage.totalPages}">1</span>
+                (<span th:text="${productPage.totalElements}">0</span> products)
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Footer Fragment -->
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+<script th:src="@{/js/cart.js}"></script>
+</body></html>

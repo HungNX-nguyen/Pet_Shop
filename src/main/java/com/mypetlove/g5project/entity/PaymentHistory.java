@@ -22,10 +22,13 @@ public class PaymentHistory {
 
     private BigDecimal amount;
 
+    @Column(name = "payment_method")
     private String paymentMethod;
 
+    @Column(name = "payment_status")
     private Boolean paymentStatus;
 
+    @Column(name = "payment_date")
     private LocalDateTime paymentDate;
 
     @OneToOne
