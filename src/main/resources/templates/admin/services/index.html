@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/admin-head :: head('Service Management')}"></head>
+<body class="bg-background font-display">
+<div class="min-h-screen flex">
+
+    <div th:replace="~{fragment/admin-sidebar :: sidebar('services')}"></div>
+
+    <div class="flex-1 flex flex-col min-w-0">
+<!--        <div th:replace="~{fragment/admin-topbar :: topbar('Service Management', 'Admin / Services')}"></div>-->
+
+        <main class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-textMain">Service Management</h2>
+                    <p class="text-sm text-textSub mt-1">Configure and monitor professional pet care offerings.</p>
+                </div>
+                <a th:href="@{/admin/services/create}"
+                   class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-white font-semibold hover:bg-red-600 transition">
+                    <span class="material-symbols-outlined text-[20px]">add</span>
+                    Add New Service
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white border border-borderSoft rounded-2xl shadow-soft p-5">
+                    <div class="text-sm text-textSub">Total Services</div>
+                    <div class="mt-2 text-3xl font-bold" th:text="${totalServices}">0</div>
+                </div>
+
+                <div class="bg-white border border-borderSoft rounded-2xl shadow-soft p-5">
+                    <div class="text-sm text-textSub">Active Services</div>
+                    <div class="mt-2 text-3xl font-bold" th:text="${activeServices}">0</div>
+                </div>
+
+                <div class="bg-white border border-borderSoft rounded-2xl shadow-soft p-5">
+                    <div class="text-sm text-textSub">Inactive Services</div>
+                    <div class="mt-2 text-3xl font-bold" th:text="${inactiveServices}">0</div>
+                </div>
+
+                <div class="bg-white border border-borderSoft rounded-2xl shadow-soft p-5">
+                    <div class="text-sm text-textSub">Average Price</div>
+                    <div class="mt-2 text-3xl font-bold" th:text="'$' + ${averagePrice}">$0.00</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white border border-borderSoft rounded-2xl shadow-soft p-4 mb-6">
+                <div class="flex flex-col lg:flex-row gap-3 lg:items-center lg:justify-between">
+
+                    <div class="flex flex-wrap gap-2">
+                        <a th:href="@{/admin/services(category='All', sort=${sort}, keyword=${keyword})}"
+                           th:class="${category == 'All'} ? 'px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold' : 'px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold'">
+                            All Services
+                        </a>
+
+                        <a th:href="@{/admin/services(category='Grooming', sort=${sort}, keyword=${keyword})}"
+                           th:class="${category == 'Grooming'} ? 'px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold' : 'px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold'">
+                            Grooming
+                        </a>
+
+                        <a th:href="@{/admin/services(category='Veterinary', sort=${sort}, keyword=${keyword})}"
+                           th:class="${category == 'Veterinary'} ? 'px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold' : 'px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold'">
+                            Veterinary
+                        </a>
+
+                        <a th:href="@{/admin/services(category='Training', sort=${sort}, keyword=${keyword})}"
+                           th:class="${category == 'Training'} ? 'px-4 py-2 rounded-full bg-primary text-white text-sm font-semibold' : 'px-4 py-2 rounded-full bg-slate-100 text-slate-600 text-sm font-semibold'">
+                            Training
+                        </a>
+                    </div>
+
+                    <form th:action="@{/admin/services}" method="get" class="flex gap-2">
+                        <input type="hidden" name="category" th:value="${category}">
+                        <input type="hidden" name="keyword" th:value="${keyword}">
+                        <select name="sort" onchange="this.form.submit()"
+                                class="rounded-xl border border-borderSoft bg-white text-sm px-4 py-2">
+                            <option value="newest" th:selected="${sort == 'newest'}">Sort by Newest</option>
+                            <option value="price" th:selected="${sort == 'price'}">Sort by Price</option>
+                            <option value="duration" th:selected="${sort == 'duration'}">Sort by Duration</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="bg-white border border-borderSoft rounded-2xl shadow-soft overflow-hidden">
+                <div class="overflow-x-auto admin-scrollbar">
+                    <table class="min-w-full">
+                        <thead class="bg-slate-50 border-b border-borderSoft">
+                        <tr class="text-left text-xs font-bold uppercase tracking-wide text-textSub">
+                            <th class="px-6 py-4">Service Name</th>
+                            <th class="px-6 py-4">Category</th>
+                            <th class="px-6 py-4">Base Price</th>
+                            <th class="px-6 py-4">Duration</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-borderSoft text-sm">
+                        <tr th:if="${#lists.isEmpty(services)}">
+                            <td colspan="6" class="px-6 py-8 text-center text-textSub">No services found</td>
+                        </tr>
+
+                        <tr th:each="service : ${services}" class="hover:bg-red-50/40 transition">
+                            <td class="px-6 py-4">
+                                <div class="font-semibold text-textMain" th:text="${service.name}">Service name</div>
+                                <div class="text-textSub text-xs mt-1" th:text="${service.description}">Description</div>
+                            </td>
+
+                            <td class="px-6 py-4 text-textSub" th:text="${service.category}">General</td>
+
+                            <td class="px-6 py-4 font-semibold" th:text="${service.price}">0.00</td>
+
+                            <td class="px-6 py-4 text-textSub" th:text="${service.duration} + ' mins'">60 mins</td>
+
+                            <td class="px-6 py-4">
+        <span th:if="${service.isActive}"
+              class="px-3 py-1 rounded-full bg-green-50 text-green-600 text-xs font-bold">Active</span>
+                                <span th:unless="${service.isActive}"
+                                      class="px-3 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold">Inactive</span>
+                            </td>
+
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-2">
+                                    <a th:href="@{/admin/services/{id}/edit(id=${service.id})}"
+                                       class="px-4 py-2 rounded-lg border border-borderSoft hover:bg-slate-50 text-sm">
+                                        Edit
+                                    </a>
+
+                                    <form th:action="@{/admin/services/{id}/toggle-status(id=${service.id})}" method="post">
+                                        <button type="submit"
+                                                class="px-4 py-2 rounded-lg border border-borderSoft hover:bg-slate-50 text-sm"
+                                                th:text="${service.isActive} ? 'Disable' : 'Enable'">
+                                            Disable
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+
+
+                    </table>
+                </div>
+
+                <div class="flex items-center justify-between px-6 py-4 border-t border-borderSoft text-sm">
+                    <div class="text-textSub"
+                         th:text="'Showing ' + (${servicePage.number} * ${servicePage.size} + 1) + ' to ' + (${servicePage.number} * ${servicePage.size} + ${servicePage.numberOfElements}) + ' of ' + ${servicePage.totalElements} + ' services'">
+                        Showing 1 to 5 of 10 services
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a th:if="${!servicePage.first}"
+                           th:href="@{/admin/services(page=${servicePage.number - 1}, category=${category}, sort=${sort}, keyword=${keyword})}"
+                           class="w-9 h-9 rounded-lg border border-borderSoft bg-white text-slate-500 flex items-center justify-center">
+                            &lt;
+                        </a>
+
+                        <th:block th:each="i : ${#numbers.sequence(0, servicePage.totalPages - 1)}">
+                            <a th:href="@{/admin/services(page=${i}, category=${category}, sort=${sort}, keyword=${keyword})}"
+                               th:text="${i + 1}"
+                               th:class="${i == servicePage.number} ? 'w-9 h-9 rounded-lg bg-primary text-white font-semibold flex items-center justify-center' : 'w-9 h-9 rounded-lg border border-borderSoft bg-white text-slate-500 flex items-center justify-center'">
+                                1
+                            </a>
+                        </th:block>
+
+                        <a th:if="${!servicePage.last}"
+                           th:href="@{/admin/services(page=${servicePage.number + 1}, category=${category}, sort=${sort}, keyword=${keyword})}"
+                           class="w-9 h-9 rounded-lg border border-borderSoft bg-white text-slate-500 flex items-center justify-center">
+                            &gt;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

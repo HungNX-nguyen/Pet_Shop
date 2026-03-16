@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import java.math.BigDecimal;
 
@@ -27,7 +29,7 @@ public class ProductRequest {
     @NotNull(message = "Số lượng tồn không được để trống")
     @Min(value = 0, message = "Số lượng tồn không được âm")
     private Integer stockQuantity;
-
+    private MultipartFile imageFile;
     private String imageUrl;
 
     @NotNull(message = "Danh mục không được để trống")

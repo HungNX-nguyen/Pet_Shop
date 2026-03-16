@@ -54,20 +54,20 @@ public class ProductController {
 
     @PostMapping("/create")
     public String create(
-            @Valid @ModelAttribute("productRequest") ProductRequest request,
-            BindingResult bindingResult,
+            @ModelAttribute("productRequest") ProductRequest request,
             Authentication authentication,
-            Model model,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
-        if (bindingResult.hasErrors()) {
+        try {
+            productService.create(request, authentication.getName());
+            redirectAttributes.addFlashAttribute("successMessage", "Tạo sản phẩm thành công");
+            return "redirect:/admin/products";
+        } catch (Exception e) {
             model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("errorMessage", e.getMessage());
             return "admin/products/create";
         }
-
-        productService.create(request, authentication.getName());
-        redirectAttributes.addFlashAttribute("successMessage", "Tạo sản phẩm thành công");
-        return "redirect:/admin/products";
     }
 
     @GetMapping("/{id}/edit")
@@ -93,20 +93,20 @@ public class ProductController {
     @PostMapping("/{id}/edit")
     public String update(
             @PathVariable Integer id,
-            @Valid @ModelAttribute("productRequest") ProductRequest request,
-            BindingResult bindingResult,
-            Model model,
-            RedirectAttributes redirectAttributes
+            @ModelAttribute("productRequest") ProductRequest request,
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
-        if (bindingResult.hasErrors()) {
+        try {
+            productService.update(id, request);
+            redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công");
+            return "redirect:/admin/products";
+        } catch (Exception e) {
             model.addAttribute("productId", id);
             model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("errorMessage", e.getMessage());
             return "admin/products/edit";
         }
-
-        productService.update(id, request);
-        redirectAttributes.addFlashAttribute("successMessage", "Cập nhật sản phẩm thành công");
-        return "redirect:/admin/products";
     }
 
     @PostMapping("/{id}/toggle-status")

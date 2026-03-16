@@ -51,7 +51,7 @@ public class Product {
     @JoinColumn(name = "created_by")
     private Account creator;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
