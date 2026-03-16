@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>405 Method Not Allowed - ProApp</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+    <div class="layout-container flex h-full grow flex-col">
+        <div class="px-40 flex flex-1 justify-center py-5">
+            <div class="layout-content-container flex flex-col w-full max-w-[1200px] flex-1">
+                <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-slate-800 px-10 py-4 mb-8">
+                    <div class="flex items-center gap-4 text-slate-900 dark:text-slate-100">
+                        <div class="size-6 text-primary">
+                            <span class="material-symbols-outlined text-2xl">grid_view</span>
+                        </div>
+                        <h2 class="text-lg font-bold leading-tight tracking-[-0.015em]">ProApp</h2>
+                    </div>
+                    <div class="flex flex-1 justify-end gap-8">
+                        <div class="flex items-center gap-9 hidden md:flex">
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Dashboard</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Projects</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Team</a>
+                            <a class="text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Settings</a>
+                        </div>
+                        <button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+                            <span class="truncate">Log Out</span>
+                        </button>
+                        <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-slate-200 dark:border-slate-700" data-alt="User profile picture placeholder" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjXH7bqd2dXuu_fu-c_OH1NCOYYvPefQ7e9ZQQER0yYnyqwIgz3JqGzBCgCmIRMfEP2W3WFq_FWHT2de-AM9bxNyoawnuJuzZqS8pQw2SpP9KZVf8T7Rle1Od_IID2ChinrKCl0lQ-OaodUEy8qnibxU4vtE_VjnyjG5TCbNLmrnHmVmG1BqYR8R2l2CSBaz5jMxjGEitkvywZgseUw-qypJ2sqZn7XecYF2ceDcVvR-fL9AI_VfdjHbQIzaMha79sCoOhgojkfw");'></div>
+                    </div>
+                </header>
+                <main class="flex flex-col flex-1 items-center justify-center px-4 py-12">
+                    <div class="flex flex-col items-center max-w-[600px] w-full text-center space-y-8">
+                        <div class="relative">
+                            <span class="material-symbols-outlined text-[120px] text-primary/20 absolute -top-4 -left-12 -z-10">warning</span>
+                            <h1 class="text-primary text-[80px] md:text-[120px] font-bold leading-none tracking-tighter">405</h1>
+                        </div>
+                        <div class="space-y-4">
+                            <h2 class="text-2xl md:text-3xl font-bold leading-tight tracking-tight text-slate-900 dark:text-slate-100">
+                                Method Not Allowed
+                            </h2>
+                            <p class="text-base text-slate-600 dark:text-slate-400 max-w-[480px] mx-auto leading-relaxed">
+                                The requested action or method is not permitted for this resource. Please check the URL, ensure you have the right permissions, or return to the dashboard.
+                            </p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto">
+                            <button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-semibold leading-normal transition-colors hover:bg-primary/90 shadow-sm">
+                                <span class="material-symbols-outlined mr-2 text-xl">home</span>
+                                <span>Return to Dashboard</span>
+                            </button>
+                            <button class="flex min-w-[140px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-base font-semibold leading-normal transition-colors hover:bg-slate-200 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700">
+                                <span class="material-symbols-outlined mr-2 text-xl">arrow_back</span>
+                                <span>Go Back</span>
+                            </button>
+                        </div>
+                        <div class="mt-8 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-100 dark:border-slate-800 w-full text-left">
+                            <div class="flex items-center gap-2 mb-2 text-slate-700 dark:text-slate-300">
+                                <span class="material-symbols-outlined text-sm">info</span>
+                                <span class="text-sm font-medium">Technical Details</span>
+                            </div>
+                            <code class="text-xs text-slate-500 dark:text-slate-400 block font-mono">
+                                Request Method: POST<br/>
+                                Resource: /api/v1/resource/update<br/>
+                                Allowed Methods: GET, HEAD, OPTIONS
+                            </code>
+                        </div>
+                    </div>
+                </main>
+                <footer class="flex flex-col gap-6 px-5 py-10 mt-auto text-center border-t border-slate-200 dark:border-slate-800">
+                    <div class="flex flex-wrap items-center justify-center gap-6 md:gap-12">
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Privacy Policy</a>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Terms of Service</a>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Contact Support</a>
+                        <a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">System Status</a>
+                    </div>
+                    <p class="text-slate-400 dark:text-slate-500 text-sm font-normal leading-normal">© 2023 ProApp. All rights reserved.</p>
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+</body></html>

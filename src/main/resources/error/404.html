@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>404 - Page Not Found | PetShop</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ec1313",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221010",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+    <!-- Header Section -->
+    <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-primary/10 px-4 md:px-10 py-3 bg-background-light dark:bg-background-dark">
+        <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 text-primary">
+                <div class="size-8">
+                    <span class="material-symbols-outlined text-4xl">pets</span>
+                </div>
+                <h2 class="text-slate-900 dark:text-slate-100 text-xl font-bold leading-tight tracking-[-0.015em]">PetShop</h2>
+            </div>
+            <div class="hidden md:flex items-center gap-9">
+                <a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Shop</a>
+                <a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Breeds</a>
+                <a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Services</a>
+                <a class="text-slate-700 dark:text-slate-300 text-sm font-medium hover:text-primary transition-colors" href="#">Offers</a>
+            </div>
+        </div>
+        <div class="flex flex-1 justify-end gap-4 md:gap-8">
+            <label class="hidden lg:flex flex-col min-w-40 h-10 max-w-64">
+                <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                    <div class="text-slate-500 flex border-none bg-primary/5 items-center justify-center pl-4 rounded-l-lg" data-icon="MagnifyingGlass">
+                        <span class="material-symbols-outlined text-[24px]">search</span>
+                    </div>
+                    <input class="form-input flex w-full min-w-0 flex-1 rounded-r-lg text-slate-900 focus:outline-0 focus:ring-0 border-none bg-primary/5 placeholder:text-slate-400 px-4 pl-2 text-base font-normal" placeholder="Search products..." value=""/>
+                </div>
+            </label>
+            <div class="flex gap-2">
+                <button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/5 text-slate-900 dark:text-slate-100 hover:bg-primary/10 transition-colors">
+                    <span class="material-symbols-outlined" data-icon="ShoppingCart">shopping_cart</span>
+                </button>
+                <button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/5 text-slate-900 dark:text-slate-100 hover:bg-primary/10 transition-colors">
+                    <span class="material-symbols-outlined" data-icon="User">person</span>
+                </button>
+            </div>
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAGFJIhzKKOf2XhUAsEGeMZ_IoprhABuwa9Eu15Q7DZ7oNFHAaOPzhnNwnrm5ZACr19T6F6CGd0JATBL7b7veQOzqiU3E_cHXRFHGdE4nSGEgjamZ6Ag84tPEM7TeD7uYPpcPy9YD7zkgU4HhkWZMvOYUKoIIsHRVk4pqAzyXHn5xuu0ZMDkKRDqMJ0exZYeQHkzk0a7eiJx0a-2MxaOpDj5gsA9NFyn44U4fUOP7WSoJ5NLsOEb-2lRgd_asxdk1P2RkJvi14dLQ");'></div>
+        </div>
+    </header>
+    <!-- Main Content (404 Page) -->
+    <main class="flex flex-1 flex-col items-center justify-center px-4 py-12 md:py-24">
+        <div class="max-w-[800px] w-full flex flex-col items-center text-center">
+            <!-- Confused Pet Illustration Container -->
+            <div class="relative w-full max-w-md aspect-[4/3] mb-8 group">
+                <div class="absolute inset-0 bg-primary/5 rounded-full blur-3xl opacity-50"></div>
+                <div class="relative w-full h-full bg-center bg-no-repeat bg-contain transition-transform duration-500 hover:scale-105" data-alt="Confused dog with head tilted looking at the viewer" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBkzXLsMT4x8XQZrI5zw-XqEmuPB4vgLkcEZhRX5dJTlS5wCFugYlZ-LajNPVw4ilOu68BGQ1Y-kffa5f02ptsAHTYqPU7Y7Zk_ovHmCFG4kRW0_-QRwQVx2s-9idS1M47pFtaKGJHln3OX4ZcsbFabNnk3CMGcCIQGPVEYKEijarxkkQlsIWOanfLhvQSB2Fv5snfftT6pZtT7YHfNuCIiCJneBou6LH28vqQgDt5_0UXI0JNQo-6C0bAXwVVqzQvcZLpIW1ObBw");'>
+                </div>
+            </div>
+            <!-- Error Code & Text -->
+            <div class="space-y-4">
+                <span class="text-primary font-bold text-lg md:text-xl uppercase tracking-widest bg-primary/10 px-4 py-1 rounded-full">Error 404</span>
+                <h1 class="text-slate-900 dark:text-slate-100 text-5xl md:text-7xl font-extrabold tracking-tight">
+                    Oops! Page Not Found
+                </h1>
+                <p class="text-slate-600 dark:text-slate-400 text-lg md:text-xl max-w-lg mx-auto leading-relaxed">
+                    It seems the page you are looking for has wandered off. Don't worry, we can help you find your way back.
+                </p>
+            </div>
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mt-10 w-full max-w-md">
+                <a class="flex-1 flex items-center justify-center gap-2 rounded-xl h-14 bg-primary text-white text-lg font-bold hover:bg-primary/90 transition-all shadow-lg shadow-primary/20" th:href="@{/}">
+                    <span class="material-symbols-outlined">home</span>
+                    <span>Go Back Home</span>
+                </a>
+                <a class="flex-1 flex items-center justify-center gap-2 rounded-xl h-14 border-2 border-primary/20 bg-transparent text-slate-900 dark:text-slate-100 text-lg font-bold hover:bg-primary/5 transition-all" th:href="@{/products}">
+                    <span class="material-symbols-outlined">search</span>
+                    <span>Search Products</span>
+                </a>
+            </div>
+        </div>
+    </main>
+    <!-- Simple Footer -->
+    <footer class="border-t border-solid border-primary/10 px-4 md:px-10 py-10 bg-background-light dark:bg-background-dark">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-3 text-primary opacity-80">
+                <span class="material-symbols-outlined">pets</span>
+                <span class="font-bold">PetShop © 2024</span>
+            </div>
+            <div class="flex gap-8 text-sm text-slate-500 dark:text-slate-400">
+                <a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+                <a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+                <a class="hover:text-primary transition-colors" href="#">Contact Us</a>
+            </div>
+            <div class="flex gap-4">
+                <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">social_leaderboard</span></a>
+                <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+                <a class="text-slate-400 hover:text-primary transition-colors" href="#"><span class="material-symbols-outlined">camera</span></a>
+            </div>
+        </div>
+    </footer>
+</div>
+</body></html>
