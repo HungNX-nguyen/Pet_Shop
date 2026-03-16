@@ -28,3 +28,11 @@ spring:
       enabled: true
       max-file-size: 10MB
       max-request-size: 10MB
+
+# VNPay Configuration
+vnpay:
+  tmn-code: "0LDS4NZ9"
+  hash-secret: "Q5BU9LPCTFOJKM1KDFCGR44K54GMXRBE"
+  payment-url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+  return-url: "http://localhost:8080/petlover/payment/vnpay-return"
+  api-version: "2.1.0"
