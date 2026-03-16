@@ -1,0 +1,26 @@
+<div th:fragment="sidebar(activeMenu)" class="admin-sidebar">
+    <div class="brand">
+        <div class="brand-badge"><i class="fa-solid fa-paw"></i></div>
+        <div>PetShop Admin</div>
+    </div>
+
+    <div class="sidebar-menu">
+        <a th:href="@{/admin/services}"
+           th:class="${activeMenu == 'services'} ? 'sidebar-link active' : 'sidebar-link'">
+            <i class="fa-solid fa-scissors"></i>
+            <span>Services</span>
+        </a>
+
+        <a th:href="@{/admin/products}"
+           th:class="${activeMenu == 'products'} ? 'sidebar-link active' : 'sidebar-link'">
+            <i class="fa-solid fa-box"></i>
+            <span>Products</span>
+        </a>
+
+        <a th:href="@{/admin/orders}"
+           th:class="${activeMenu == 'orders'} ? 'sidebar-link active' : 'sidebar-link'">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Orders</span>
+        </a>
+    </div>
+</div>

@@ -22,6 +22,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
     Optional<Account> findByEmailOrUsername(String email, String username);
 
+    Optional<Account> findFirstByOrderByAccountIDAsc();
+
     @Query("SELECT a FROM Account a WHERE a.isActive = true")
     List<Account> findAllActiveAccounts();
 

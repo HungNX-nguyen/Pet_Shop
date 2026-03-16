@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,26 +15,35 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name = "Services")
-public class Service {
+public class ServiceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private Account creator;
+
+    @Column(length = 255)
     private String name;
 
+    @Column(name = "category", length = 50, nullable = false)
+    private String category;
+
+    @Lob
     private String description;
 
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
     private Integer duration;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "createdBy")
-    private Account creator;
-
-    @OneToMany(mappedBy = "service")
-    private List<BookingService> bookingServices;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
