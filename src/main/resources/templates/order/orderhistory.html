@@ -205,6 +205,14 @@
                                     <a th:href="@{/orders/{id}(id=${order.id})}"
                                        class="text-primary hover:text-primary/80 font-bold text-sm">View Details</a>
 
+                                    <!-- Continue Checkout Button: only for WAITING_PAYMENT -->
+                                    <a th:if="${order.status.name() == 'WAITING_PAYMENT'}"
+                                       th:href="@{/orders/{id}/checkout(id=${order.id})}"
+                                       class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors">
+                                        <span class="material-symbols-outlined text-[14px]">shopping_cart_checkout</span>
+                                        Checkout
+                                    </a>
+
                                     <!-- Cancel Button: only for WAITING_PAYMENT or PROCESSING -->
                                     <form th:if="${order.status.name() == 'WAITING_PAYMENT' or order.status.name() == 'PROCESSING'}"
                                           th:action="@{/orders/{id}/cancel(id=${order.id})}"
