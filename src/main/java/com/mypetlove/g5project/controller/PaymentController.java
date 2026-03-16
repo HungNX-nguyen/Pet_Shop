@@ -1,9 +1,12 @@
 package com.mypetlove.g5project.controller;
 
 import com.mypetlove.g5project.entity.Order;
+import com.mypetlove.g5project.entity.OrderItem;
 import com.mypetlove.g5project.entity.PaymentHistory;
+import com.mypetlove.g5project.entity.Product;
 import com.mypetlove.g5project.repository.OrderRepository;
 import com.mypetlove.g5project.repository.PaymentHistoryRepository;
+import com.mypetlove.g5project.repository.ProductRepository;
 import com.mypetlove.g5project.service.VNPayService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,7 @@ public class PaymentController {
     private final VNPayService vnPayService;
     private final OrderRepository orderRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
+    private final ProductRepository productRepository;
 
     /**
      * User confirm đơn ONLINE → lưu địa chỉ → redirect sang VNPay
@@ -89,6 +93,17 @@ public class PaymentController {
 
         } else {
             // ❌ Thanh toán thất bại hoặc bị hủy
+            
+            // ✅ Trả lại stock quantity cho các sản phẩm
+            for (OrderItem orderItem : order.getOrderItems()) {
+                Product product = orderItem.getProduct();
+                int returnQuantity = orderItem.getQuantity();
+                
+                // Cộng lại số lượng đã trừ khi tạo order
+                product.setStockQuantity(product.getStockQuantity() + returnQuantity);
+                productRepository.save(product);
+            }
+            
             order.setStatus(Order.OrderStatus.CANCELLED);
             orderRepository.save(order);
 

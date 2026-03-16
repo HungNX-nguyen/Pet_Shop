@@ -239,6 +239,16 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Không thể hủy đơn hàng ở trạng thái hiện tại");
         }
 
+        // ✅ Trả lại stock quantity cho các sản phẩm
+        for (OrderItem orderItem : order.getOrderItems()) {
+            Product product = orderItem.getProduct();
+            int returnQuantity = orderItem.getQuantity();
+            
+            // Cộng lại số lượng đã trừ khi tạo order
+            product.setStockQuantity(product.getStockQuantity() + returnQuantity);
+            productRepository.save(product);
+        }
+
         order.setStatus(Order.OrderStatus.CANCELLED);        // ✅ enum
         orderRepository.save(order);
     }
