@@ -3,8 +3,6 @@ package com.mypetlove.g5project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -28,18 +26,10 @@ public class Order {
 
     private BigDecimal totalAmount;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
+    private String status;
 
-    @Column(name = "shipping_address")
-    private String shippingAddress;
-
-    @Column(name = "created_at")
-    @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @ManyToOne
@@ -54,14 +44,4 @@ public class Order {
 
     @OneToOne(mappedBy = "order")
     private PaymentHistory paymentHistory;
-
-    public enum OrderStatus {
-        WAITING_PAYMENT,   // Chờ thanh toán (mới tạo)
-        PROCESSING,        // COD đã confirm, đang xử lý
-        CONFIRMED,         // Online đã confirm, chờ ship
-        SHIPPING,          // Đang giao
-        DELIVERED,         // Giao thành công
-        CANCELLED,         // Đã hủy
-        PAID               // Đã thanh toán online (VNPay success)
-    }
 }

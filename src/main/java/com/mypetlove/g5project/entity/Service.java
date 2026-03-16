@@ -29,7 +29,6 @@ public class Service {
 
     private Integer duration;
 
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
