@@ -32,12 +32,14 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/register",
                                 "/products", "/products/**",
                                 "/services", "/services/**",
+                                "/api/**",
                                 "/css/**", "/js/**", "/images/**").permitAll()
                         // Chỉ SHOP_OWNER
                         .requestMatchers("/shop/**", "/admin/**").hasRole("SHOP_OWNER")
                         // Chỉ CUSTOMER
                         .requestMatchers("/orders/**").hasRole("CUSTOMER")
                         // Cả 2 role đều cần login
+                        .requestMatchers("/petlover/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
