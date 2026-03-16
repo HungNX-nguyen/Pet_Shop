@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: head(|Shopping Cart - PetCare|)}">
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+
+<header th:replace="~{fragment/header :: header}"></header>
+
+<main class="max-w-7xl mx-auto px-4 md:px-10 lg:px-20 py-12">
+    <h2 class="text-4xl font-black mb-10 tracking-tight">Shopping Cart</h2>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <!-- Items List -->
+        <div class="lg:col-span-2 space-y-8">
+            <!-- Empty cart -->
+            <div th:if="${#lists.isEmpty(cart.items)}" class="text-center py-16 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800">
+                <span class="material-symbols-outlined text-6xl text-slate-300 mb-4 block">shopping_cart</span>
+                <p class="text-xl font-bold text-slate-500 mb-4">Giỏ hàng của bạn đang trống</p>
+                <a th:href="@{/products}" class="inline-flex items-center gap-2 text-primary font-semibold hover:underline">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Tiếp tục mua sắm
+                </a>
+            </div>
+            
+            <!-- Cart items -->
+            <div th:each="item : ${cart.items}" th:id="'cart-item-' + ${item.productId}" class="flex flex-col sm:flex-row items-center gap-6 p-6 bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-100 dark:border-slate-800 transition-all duration-300">
+                <div class="w-32 h-32 rounded-lg bg-slate-100 overflow-hidden flex-shrink-0">
+                    <img th:src="@{${item.imageUrl != null and item.imageUrl.startsWith('http') ? item.imageUrl : '/' + item.imageUrl}}" th:alt="${item.productName}" class="w-full h-full object-cover"/>
+                </div>
+                <div class="flex-1 space-y-1 w-full">
+                    <h3 class="text-xl font-bold" th:text="${item.productName}">Product Name</h3>
+                    <p class="text-slate-500 text-sm" th:text="${item.productCategory}">Category</p>
+                    <div class="pt-4 flex items-center justify-between sm:justify-start sm:gap-12">
+                        <div class="flex items-center gap-3 bg-slate-100 dark:bg-slate-800 rounded-full px-3 py-1">
+                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} - 1) + ')'" class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">-</button>
+                            <span th:id="'quantity-' + ${item.productId}" class="font-bold w-6 text-center" th:text="${item.quantity}">1</span>
+                            <button th:onclick="'updateCartItem(' + ${item.productId} + ', ' + (${item.quantity} + 1) + ')'" class="w-8 h-8 flex items-center justify-center hover:text-primary transition-colors font-bold">+</button>
+                        </div>
+                        <span class="text-xl font-black text-primary" th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                    </div>
+                </div>
+                <button th:onclick="'removeCartItem(' + ${item.productId} + ')'" class="p-2 text-slate-400 hover:text-primary transition-colors self-start sm:self-center">
+                    <span class="material-symbols-outlined">delete</span>
+                </button>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(cart.items)}" class="pt-6">
+                <a th:href="@{/products}" class="inline-flex items-center gap-2 text-slate-500 hover:text-primary font-semibold transition-colors">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    Continue Shopping
+                </a>
+            </div>
+        </div>
+        
+        <!-- Cart Summary -->
+        <div th:if="${!#lists.isEmpty(cart.items)}" class="space-y-6">
+            <div class="bg-white dark:bg-slate-900 rounded-2xl p-8 shadow-lg border border-slate-100 dark:border-slate-800 sticky top-28">
+                <h3 class="text-2xl font-bold mb-6">Order Summary</h3>
+                <div class="space-y-4 text-slate-600 dark:text-slate-400 mb-8">
+                    <div class="flex justify-between">
+                        <span>Subtotal</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.subtotal, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Shipping (Estimated)</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.shipping, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Tax</span>
+                        <span class="font-bold text-slate-900 dark:text-slate-100" th:text="${#numbers.formatDecimal(cart.tax, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                    </div>
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-4 flex justify-between">
+                        <span class="text-lg font-bold text-slate-900 dark:text-slate-100">Total</span>
+                        <span class="text-2xl font-black text-primary" th:text="${#numbers.formatDecimal(cart.total, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
+                    </div>
+                </div>
+                <button class="w-full bg-primary text-white py-4 rounded-xl font-bold text-lg hover:bg-primary/90 transition-all shadow-md hover:shadow-primary/20 shadow-primary/10 flex items-center justify-center gap-2">
+                    Proceed to Checkout
+                    <span class="material-symbols-outlined">shopping_cart_checkout</span>
+                </button>
+            </div>
+            
+            <!-- Trusted Badges -->
+            <div class="grid grid-cols-3 gap-4 text-center py-4 opacity-60">
+                <div class="space-y-1">
+                    <span class="material-symbols-outlined text-primary">verified_user</span>
+                    <p class="text-[10px] font-bold uppercase tracking-widest">Secure Pay</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="material-symbols-outlined text-primary">local_shipping</span>
+                    <p class="text-[10px] font-bold uppercase tracking-widest">Fast Delivery</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="material-symbols-outlined text-primary">cycle</span>
+                    <p class="text-[10px] font-bold uppercase tracking-widest">Easy Return</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer th:replace="~{fragment/footer :: footer}"></footer>
+
+</body>
+</html>

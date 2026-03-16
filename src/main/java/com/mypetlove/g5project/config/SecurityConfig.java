@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/login", "/register",
                                 "/products", "/products/**",
                                 "/services", "/services/**",
+                                "/cart", "/api/cart/**",
                                 "/css/**", "/js/**", "/images/**").permitAll()
                         // Chỉ SHOP_OWNER
                         .requestMatchers("/shop/**", "/admin/**").hasRole("SHOP_OWNER")
