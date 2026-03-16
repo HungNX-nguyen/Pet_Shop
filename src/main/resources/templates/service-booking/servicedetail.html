@@ -15,23 +15,103 @@
             <!-- Hero Section -->
             <section class="px-6 lg:px-20 py-12">
                 <div class="max-w-4xl mx-auto">
-                    <h1 class="text-4xl font-extrabold mb-6" th:text="${service.name}">Service Name</h1>
-                    <p class="text-lg text-slate-600 mb-6" th:text="${service.description}">Service description</p>
-                    <p class="text-2xl font-bold text-primary mb-6">
-                        Price: $<span th:text="${service.price}"></span>
-                    </p>
-                    <p class="text-lg mb-6">
-                        Duration: <span th:text="${service.duration}"></span> minutes
-                    </p>
-                    <div class="flex flex-wrap gap-4">
+
+                    <!-- Breadcrumb -->
+                    <div class="flex items-center gap-2 mb-6">
                         <a href="/petlover/services"
-                           class="px-8 py-3 bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-bold rounded-lg hover:bg-slate-200 transition">
-                            ← Back to Services
+                           class="flex items-center gap-1.5 text-sm text-slate-500 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-base">chevron_left</span>
+                            Back to Services
                         </a>
-                        <a th:href="@{/services/{id}/booking(id=${service.id})}"
-                           class="px-8 py-3 bg-primary text-white font-bold rounded-lg hover:bg-primary/90 transition">
-                            Book Now
-                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_200px] gap-8 items-start">
+
+                        <!-- Left: Info -->
+                        <div>
+                            <!-- Category Badge -->
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-primary text-xl">pets</span>
+                                </div>
+                                <span class="text-xs font-bold text-primary bg-primary/10 px-3 py-1 rounded-full uppercase tracking-wider">
+                        Grooming Service
+                    </span>
+                            </div>
+
+                            <!-- Title & Description -->
+                            <h1 class="text-4xl font-extrabold mb-3 leading-tight"
+                                th:text="${service.name}">Service Name</h1>
+                            <p class="text-base text-slate-600 dark:text-slate-400 mb-6 leading-relaxed max-w-xl"
+                               th:text="${service.description}">Service description</p>
+
+                            <!-- Stats Row -->
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <div class="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl px-4 py-2.5">
+                                    <span class="material-symbols-outlined text-primary text-base">schedule</span>
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Duration</p>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">
+                                            <span th:text="${service.duration}"></span> min
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl px-4 py-2.5">
+                                    <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings:'FILL' 1">star</span>
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Rating</p>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">4.9 / 5.0</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-xl px-4 py-2.5">
+                                    <span class="material-symbols-outlined text-primary text-base">groups</span>
+                                    <div>
+                                        <p class="text-[10px] text-slate-400 uppercase tracking-wider font-bold">Bookings</p>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-slate-100">200+ done</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- CTA Buttons -->
+                            <div class="flex flex-wrap items-center gap-3">
+                                <a th:href="@{/services/{id}/booking(id=${service.id})}"
+                                   class="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 transition-all active:scale-95 shadow-lg shadow-primary/25">
+                                    <span class="material-symbols-outlined text-base">calendar_month</span>
+                                    Book Now
+                                </a>
+                                <a href="/petlover/services"
+                                   class="inline-flex items-center gap-2 px-6 py-3.5 bg-transparent text-slate-600 dark:text-slate-300 font-bold border border-slate-200 dark:border-slate-700 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+                                    See all services
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Right: Price Card -->
+                        <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm"
+                             style="border-top: 3px solid var(--color-primary, #e05252);">
+                            <div class="p-6 text-center">
+                                <p class="text-xs text-slate-400 uppercase tracking-wider font-bold mb-1">Starting from</p>
+                                <p class="text-5xl font-extrabold text-primary leading-none">
+                                    $<span th:text="${service.price}"></span>
+                                </p>
+                                <p class="text-xs text-slate-400 mt-1 mb-5">per session</p>
+
+                                <div class="border-t border-slate-100 dark:border-slate-800 pt-4 text-left space-y-2.5">
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings:'FILL' 1">check_circle</span>
+                                        <span class="text-xs text-slate-600 dark:text-slate-400">No upfront payment</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings:'FILL' 1">check_circle</span>
+                                        <span class="text-xs text-slate-600 dark:text-slate-400">Free cancellation</span>
+                                    </div>
+                                    <div class="flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-primary text-base" style="font-variation-settings:'FILL' 1">check_circle</span>
+                                        <span class="text-xs text-slate-600 dark:text-slate-400">Certified groomers</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
