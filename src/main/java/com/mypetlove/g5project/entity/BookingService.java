@@ -24,5 +24,5 @@ public class BookingService {
     @ManyToOne
     @MapsId("serviceId")
     @JoinColumn(name = "service_id")
-    private ServiceEntity serviceEntity;
+    private Service service;
 }

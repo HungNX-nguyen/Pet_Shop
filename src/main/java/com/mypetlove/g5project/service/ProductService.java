@@ -4,31 +4,16 @@ import com.mypetlove.g5project.dto.DtoRespone.ProductCardResponse;
 import com.mypetlove.g5project.dto.DtoRespone.ProductDetailResponse;
 import com.mypetlove.g5project.entity.Product;
 import org.springframework.data.domain.Page;
-import com.mypetlove.g5project.dto.ProductRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface ProductService {
-    public List<Product> getBestSellers();
-    public List<Product> getAllActiveProducts();
-    public List<Product> searchProducts(String keyword);
-    Page<Product> getAllProducts(
-            String keyword,
-            Integer categoryId,
-            Boolean isActive,
-            String sort,
-            int page,
-            int size
-    );
+    List<Product> getBestSellers();
 
-    Product getById(Integer id);
+    List<Product> getAllActiveProducts();
 
-    Product create(ProductRequest request, String username);
-
-    Product update(Integer id, ProductRequest request);
-
-    void toggleStatus(Integer id);
+    List<Product> searchProducts(String keyword);
 
     // Paginated methods
     Page<Product> getActiveProducts(Pageable pageable);
