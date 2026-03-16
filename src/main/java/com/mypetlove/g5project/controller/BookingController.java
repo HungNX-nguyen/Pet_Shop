@@ -3,7 +3,9 @@ package com.mypetlove.g5project.controller;
 import com.mypetlove.g5project.dto.BookingDto.BookingCreateDto;
 import com.mypetlove.g5project.dto.BookingDto.BookingDto;
 import com.mypetlove.g5project.dto.BookingDto.TimeSlotDto;
+import com.mypetlove.g5project.entity.Account;
 import com.mypetlove.g5project.entity.Service;
+import com.mypetlove.g5project.repository.AccountRepository;
 import com.mypetlove.g5project.repository.ServiceRepository;
 import com.mypetlove.g5project.service.IBookingService;
 
@@ -27,6 +29,7 @@ public class BookingController {
 
     private final IBookingService bookingService;
     private final ServiceRepository serviceRepository;
+    private final AccountRepository accountRepository;
 
     // ------------------------------------------------
     // GET /services/{id}/booking
@@ -34,6 +37,7 @@ public class BookingController {
     @GetMapping("/services/{id}/booking")
     public String bookingForm(@PathVariable Integer id,
                               @RequestParam(required = false) String date,
+                              @AuthenticationPrincipal UserDetails userDetails,
                               Model model) {
 
         Service service = serviceRepository.findById(id)
@@ -46,8 +50,18 @@ public class BookingController {
         List<TimeSlotDto> slots =
                 bookingService.getAvailableSlots(selectedDate);
 
+        // Pre-fill contact từ account đang login
+        Account account = accountRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Account not found"));
+
+        BookingCreateDto dto = BookingCreateDto.builder()
+                .contactName(account.getFullName())
+                .contactPhone(account.getPhoneNumber())
+                .contactEmail(account.getEmail())
+                .build();
+
         model.addAttribute("service", service);
-        model.addAttribute("bookingCreateDto", new BookingCreateDto());
+        model.addAttribute("bookingCreateDto", dto);
         model.addAttribute("timeSlots", slots);
         model.addAttribute("selectedDate", selectedDate);
 
@@ -104,7 +118,7 @@ public class BookingController {
     // ------------------------------------------------
     // POST /bookings/{id}/cancel
     // ------------------------------------------------
-    @PostMapping("/petlover/bookings/{id}/cancel")  // ← thêm /petlover
+    @PostMapping("/petlover/bookings/{id}/cancel")
     public String cancelBooking(@PathVariable Integer id,
                                 @AuthenticationPrincipal UserDetails userDetails,
                                 RedirectAttributes redirectAttrs) {
@@ -114,7 +128,7 @@ public class BookingController {
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/petlover/bookings";  // ← cũng sửa redirect
+        return "redirect:/petlover/bookings";
     }
 
 
