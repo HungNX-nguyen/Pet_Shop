@@ -21,20 +21,32 @@ public class Service {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private Account creator;
+
+    @Column(length = 255)
     private String name;
 
+    @Column(name = "category", length = 50, nullable = false)
+    private String category;
+
+    @Lob
     private String description;
 
+    @Column(precision = 10, scale = 2)
     private BigDecimal price;
 
     private Integer duration;
 
+    @Column(name = "is_active")
+    private Boolean isActive;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "createdBy")
-    private Account creator;
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "service")
     private List<BookingService> bookingServices;

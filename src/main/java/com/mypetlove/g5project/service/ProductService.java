@@ -2,6 +2,7 @@ package com.mypetlove.g5project.service;
 
 import com.mypetlove.g5project.dto.DtoRespone.ProductCardResponse;
 import com.mypetlove.g5project.dto.DtoRespone.ProductDetailResponse;
+import com.mypetlove.g5project.dto.ProductRequest;
 import com.mypetlove.g5project.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,22 @@ public interface ProductService {
     List<Product> getAllActiveProducts();
 
     List<Product> searchProducts(String keyword);
+    Page<Product> getAllProducts(
+            String keyword,
+            Integer categoryId,
+            Boolean isActive,
+            String sort,
+            int page,
+            int size
+    );
+
+    Product getById(Integer id);
+
+    Product create(ProductRequest request, String username);
+
+    Product update(Integer id, ProductRequest request);
+
+    void toggleStatus(Integer id);
 
     // Paginated methods
     Page<Product> getActiveProducts(Pageable pageable);

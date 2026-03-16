@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/admin-head :: head('Order Detail')"></head>
+<body class="bg-background font-display text-textMain">
+<div class="min-h-screen flex">
+    <aside th:replace="fragment/admin-sidebar :: sidebar('orders')"></aside>
+
+    <div class="flex-1 min-w-0">
+        <header th:replace="fragment/admin-topbar :: topbar('Order Detail', 'Admin / Orders / Detail')"></header>
+
+        <main class="p-6 space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-bold">Order Detail</h2>
+                    <p class="text-sm text-textSub">View customer order information and purchased items.</p>
+                </div>
+
+                <a th:href="@{/admin/orders}"
+                   class="inline-flex items-center justify-center rounded-2xl border border-borderSoft px-4 py-2 font-semibold hover:bg-slate-50 transition">
+                    Back to List
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                <section class="bg-white rounded-3xl shadow-soft border border-borderSoft p-6">
+                    <h3 class="text-lg font-bold mb-4">Order Information</h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">ID</span>
+                            <span class="font-semibold" th:text="${order.id}">1</span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Order Code</span>
+                            <span class="font-semibold" th:text="${order.orderCode}">ORD-001</span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Status</span>
+                            <span class="font-semibold" th:text="${order.status}">PENDING</span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Total Amount</span>
+                            <span class="font-semibold"
+                                  th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 2, 'POINT')} + ' VND'">
+                                320,000.00 VND
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Created At</span>
+                            <span class="font-semibold"
+                                  th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm') : 'N/A'}">
+                                10/03/2026 09:15
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Updated At</span>
+                            <span class="font-semibold"
+                                  th:text="${order.updatedAt != null ? #temporals.format(order.updatedAt, 'dd/MM/yyyy HH:mm') : 'N/A'}">
+                                10/03/2026 09:15
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="bg-white rounded-3xl shadow-soft border border-borderSoft p-6">
+                    <h3 class="text-lg font-bold mb-4">Customer Information</h3>
+
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Full Name</span>
+                            <span class="font-semibold"
+                                  th:text="${order.customer != null ? order.customer.fullName : 'N/A'}">
+                                Nguyen Van A
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Username</span>
+                            <span class="font-semibold"
+                                  th:text="${order.customer != null ? order.customer.username : 'N/A'}">
+                                customer01
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Email</span>
+                            <span class="font-semibold break-all"
+                                  th:text="${order.customer != null ? order.customer.email : 'N/A'}">
+                                customer01@gmail.com
+                            </span>
+                        </div>
+
+                        <div class="flex justify-between gap-4">
+                            <span class="text-textSub">Phone</span>
+                            <span class="font-semibold"
+                                  th:text="${order.customer != null ? order.customer.phoneNumber : 'N/A'}">
+                                0902000001
+                            </span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section class="bg-white rounded-3xl shadow-soft border border-borderSoft p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold">Order Items</h3>
+                    <span class="text-sm text-textSub"
+                          th:text="${order.orderItems != null ? #lists.size(order.orderItems) + ' item(s)' : '0 item(s)'}">
+                        0 item(s)
+                    </span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[900px]">
+                        <thead>
+                        <tr class="border-b border-borderSoft text-left text-sm text-textSub">
+                            <th class="px-4 py-3 font-semibold">ID</th>
+                            <th class="px-4 py-3 font-semibold">Product</th>
+                            <th class="px-4 py-3 font-semibold">Image</th>
+                            <th class="px-4 py-3 font-semibold">Quantity</th>
+                            <th class="px-4 py-3 font-semibold">Unit Price</th>
+                            <th class="px-4 py-3 font-semibold">Sub Total</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(order.orderItems)}">
+                            <td colspan="6" class="px-4 py-8 text-center text-textSub">No order items found.</td>
+                        </tr>
+
+                        <tr th:each="item : ${order.orderItems}" class="border-b border-borderSoft hover:bg-slate-50/70 transition">
+                            <td class="px-4 py-4" th:text="${item.id}">1</td>
+
+                            <td class="px-4 py-4">
+                                <div class="font-semibold"
+                                     th:text="${item.product != null ? item.product.name : 'N/A'}">
+                                    Product name
+                                </div>
+                            </td>
+
+                            <td class="px-4 py-4">
+                                <img th:if="${item.product != null and item.product.imageUrl != null and !#strings.isEmpty(item.product.imageUrl)}"
+                                     th:src="@{${item.product.imageUrl}}"
+                                     alt="product-image"
+                                     class="w-16 h-16 rounded-2xl object-cover border border-borderSoft">
+
+                                <span th:if="${item.product == null or item.product.imageUrl == null or #strings.isEmpty(item.product.imageUrl)}"
+                                      class="text-sm text-textSub">
+                                    No image
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-4 font-semibold" th:text="${item.quantity}">1</td>
+
+                            <td class="px-4 py-4 font-semibold"
+                                th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 2, 'POINT')} + ' VND'">
+                                100,000.00 VND
+                            </td>
+
+                            <td class="px-4 py-4 font-semibold"
+                                th:text="${#numbers.formatDecimal(item.subTotal, 0, 'COMMA', 2, 'POINT')} + ' VND'">
+                                100,000.00 VND
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section th:if="${order.paymentHistory != null}"
+                     class="bg-white rounded-3xl shadow-soft border border-borderSoft p-6">
+                <h3 class="text-lg font-bold mb-4">Payment Information</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="rounded-2xl border border-borderSoft p-4">
+                        <div class="text-textSub mb-1">Amount</div>
+                        <div class="font-semibold"
+                             th:text="${#numbers.formatDecimal(order.paymentHistory.amount, 0, 'COMMA', 2, 'POINT')} + ' VND'">
+                            305,000.00 VND
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-borderSoft p-4">
+                        <div class="text-textSub mb-1">Payment Method</div>
+                        <div class="font-semibold" th:text="${order.paymentHistory.paymentMethod}">CASH</div>
+                    </div>
+
+                    <div class="rounded-2xl border border-borderSoft p-4">
+                        <div class="text-textSub mb-1">Payment Status</div>
+                        <div class="font-semibold"
+                             th:text="${order.paymentHistory.paymentStatus ? 'Paid' : 'Unpaid'}">
+                            Paid
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-borderSoft p-4">
+                        <div class="text-textSub mb-1">Payment Date</div>
+                        <div class="font-semibold"
+                             th:text="${order.paymentHistory.paymentDate != null ? #temporals.format(order.paymentHistory.paymentDate, 'dd/MM/yyyy HH:mm') : 'N/A'}">
+                            11/03/2026 15:10
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</div>
+</body>
+</html>

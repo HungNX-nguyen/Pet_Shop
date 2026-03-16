@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/admin-head :: head('Order Management')"></head>
+<body class="bg-background font-display text-textMain">
+<div class="min-h-screen flex">
+    <aside th:replace="fragment/admin-sidebar :: sidebar('orders')"></aside>
+
+    <div class="flex-1 min-w-0">
+        <header th:replace="fragment/admin-topbar :: topbar('Order Management', 'Admin / Orders')"></header>
+
+        <main class="p-6">
+            <div class="bg-white rounded-3xl shadow-soft border border-borderSoft p-6">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-bold">Order List</h2>
+                        <p class="text-sm text-textSub">Manage and track customer orders.</p>
+                    </div>
+                </div>
+
+                <form th:action="@{/admin/orders}" method="get" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 mb-6">
+                    <div class="xl:col-span-2">
+                        <label class="block text-sm font-medium mb-2">Keyword</label>
+                        <input type="text"
+                               name="keyword"
+                               th:value="${keyword}"
+                               placeholder="Order code, customer name, username..."
+                               class="w-full rounded-2xl border border-borderSoft px-4 py-3 outline-none focus:ring-2 focus:ring-red-100 focus:border-primary">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Status</label>
+                        <select name="status"
+                                class="w-full rounded-2xl border border-borderSoft px-4 py-3 outline-none focus:ring-2 focus:ring-red-100 focus:border-primary bg-white">
+                            <option value="">All status</option>
+                            <option value="">All status</option>
+                            <option value="WAITING_PAYMENT" th:selected="${status == 'WAITING_PAYMENT'}">WAITING_PAYMENT</option>
+                            <option value="PROCESSING" th:selected="${status == 'PROCESSING'}">PROCESSING</option>
+                            <option value="CONFIRMED" th:selected="${status == 'CONFIRMED'}">CONFIRMED</option>
+                            <option value="SHIPPING" th:selected="${status == 'SHIPPING'}">SHIPPING</option>
+                            <option value="DELIVERED" th:selected="${status == 'DELIVERED'}">DELIVERED</option>
+                            <option value="PAID" th:selected="${status == 'PAID'}">PAID</option>
+                            <option value="CANCELLED" th:selected="${status == 'CANCELLED'}">CANCELLED</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Page size</label>
+                        <select name="size"
+                                class="w-full rounded-2xl border border-borderSoft px-4 py-3 outline-none focus:ring-2 focus:ring-red-100 focus:border-primary bg-white">
+                            <option value="5" th:selected="${size == 5}">5</option>
+                            <option value="10" th:selected="${size == 10}">10</option>
+                            <option value="20" th:selected="${size == 20}">20</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-end gap-3">
+                        <button type="submit"
+                                class="flex-1 rounded-2xl bg-primary text-white font-semibold px-4 py-3 hover:opacity-90 transition">
+                            Filter
+                        </button>
+                        <a th:href="@{/admin/orders}"
+                           class="flex-1 text-center rounded-2xl border border-borderSoft px-4 py-3 font-semibold hover:bg-slate-50 transition">
+                            Reset
+                        </a>
+                    </div>
+                </form>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[900px]">
+                        <thead>
+                        <tr class="border-b border-borderSoft text-left text-sm text-textSub">
+                            <th class="px-4 py-3 font-semibold">ID</th>
+                            <th class="px-4 py-3 font-semibold">Order Code</th>
+                            <th class="px-4 py-3 font-semibold">Customer</th>
+                            <th class="px-4 py-3 font-semibold">Total Amount</th>
+                            <th class="px-4 py-3 font-semibold">Status</th>
+                            <th class="px-4 py-3 font-semibold">Created At</th>
+                            <th class="px-4 py-3 font-semibold text-center">Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:if="${#lists.isEmpty(orders)}">
+                            <td colspan="7" class="px-4 py-8 text-center text-textSub">
+                                No orders found.
+                            </td>
+                        </tr>
+
+                        <tr th:each="order : ${orders}" class="border-b border-borderSoft hover:bg-slate-50/70 transition">
+                            <td class="px-4 py-4" th:text="${order.id}">1</td>
+
+                            <td class="px-4 py-4">
+                                <div class="font-semibold" th:text="${order.orderCode}">ORD-001</div>
+                            </td>
+
+                            <td class="px-4 py-4">
+                                <div class="font-semibold"
+                                     th:text="${order.customer != null ? order.customer.fullName : 'N/A'}">Nguyen Van A</div>
+                                <div class="text-sm text-textSub"
+                                     th:text="${order.customer != null ? order.customer.username : ''}">customer01</div>
+                            </td>
+
+                            <td class="px-4 py-4 font-semibold"
+                                th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 2, 'POINT')} + ' VND'">
+                                320,000.00 VND
+                            </td>
+
+                            <td class="px-4 py-4">
+                                <span th:if="${order.status == 'PENDING'}"
+                                      class="inline-flex items-center rounded-full bg-amber-100 text-amber-700 px-3 py-1 text-xs font-semibold">
+                                    PENDING
+                                </span>
+
+                                <span th:if="${order.status == 'CONFIRMED'}"
+                                      class="inline-flex items-center rounded-full bg-sky-100 text-sky-700 px-3 py-1 text-xs font-semibold">
+                                    CONFIRMED
+                                </span>
+
+                                <span th:if="${order.status == 'SHIPPING'}"
+                                      class="inline-flex items-center rounded-full bg-indigo-100 text-indigo-700 px-3 py-1 text-xs font-semibold">
+                                    SHIPPING
+                                </span>
+
+                                <span th:if="${order.status == 'COMPLETED'}"
+                                      class="inline-flex items-center rounded-full bg-emerald-100 text-emerald-700 px-3 py-1 text-xs font-semibold">
+                                    COMPLETED
+                                </span>
+
+                                <span th:if="${order.status == 'CANCELLED'}"
+                                      class="inline-flex items-center rounded-full bg-red-100 text-red-700 px-3 py-1 text-xs font-semibold">
+                                    CANCELLED
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-4 text-sm text-textSub"
+                                th:text="${order.createdAt != null ? #temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm') : ''}">
+                                10/03/2026 09:15
+                            </td>
+
+                            <td class="px-4 py-4 text-center">
+                                <a th:href="@{/admin/orders/{id}(id=${order.id})}"
+                                   class="inline-flex items-center justify-center rounded-2xl border border-borderSoft px-4 py-2 font-semibold hover:bg-slate-50 transition">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div th:if="${orderPage.totalPages > 1}" class="mt-6 flex items-center justify-center gap-2 flex-wrap">
+                    <a th:href="@{/admin/orders(page=${orderPage.number - 1}, keyword=${keyword}, status=${status}, size=${size}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                       th:classappend="${orderPage.first} ? 'pointer-events-none opacity-50' : ''"
+                       class="rounded-2xl border border-borderSoft px-4 py-2 text-sm font-semibold hover:bg-slate-50 transition">
+                        Previous
+                    </a>
+
+                    <a th:each="i : ${#numbers.sequence(0, orderPage.totalPages - 1)}"
+                       th:href="@{/admin/orders(page=${i}, keyword=${keyword}, status=${status}, size=${size}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                       th:text="${i + 1}"
+                       th:classappend="${i == orderPage.number} ? 'bg-primary text-white border-primary' : 'hover:bg-slate-50'"
+                       class="rounded-2xl border border-borderSoft px-4 py-2 text-sm font-semibold transition">
+                        1
+                    </a>
+
+                    <a th:href="@{/admin/orders(page=${orderPage.number + 1}, keyword=${keyword}, status=${status}, size=${size}, sortBy=${sortBy}, sortDir=${sortDir})}"
+                       th:classappend="${orderPage.last} ? 'pointer-events-none opacity-50' : ''"
+                       class="rounded-2xl border border-borderSoft px-4 py-2 text-sm font-semibold hover:bg-slate-50 transition">
+                        Next
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+</body>
+</html>

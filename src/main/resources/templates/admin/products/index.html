@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/admin-head :: head('Product Management')}"></head>
+<body>
+<div class="admin-shell">
+    <aside th:replace="~{fragment/admin-sidebar :: sidebar('products')}"></aside>
+
+    <main class="admin-main">
+        <div th:replace="~{fragment/admin-topbar :: topbar('Product Management', 'Admin / Products')}"></div>
+
+        <div class="page-actions">
+            <div>
+                <h2 class="page-title">Product Management</h2>
+                <div class="page-subtitle">Manage products in your inventory.</div>
+            </div>
+            <a th:href="@{/admin/products/create}" class="btn-ui btn-primary-ui">
+                <i class="fa-solid fa-plus"></i>
+                <span style="margin-left: 8px;">Add New Product</span>
+            </a>
+        </div>
+
+<!--        <div th:if="${successMessage}" class="alert-ui alert-success-ui" th:text="${successMessage}"></div>-->
+
+        <div class="stat-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Products</div>
+                <div class="stat-value" th:text="${productPage.totalElements}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Products</div>
+                <div class="stat-value"
+                     th:text="${#aggregates.sum(products.![isActive ? 1 : 0])}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Inactive Products</div>
+                <div class="stat-value"
+                     th:text="${#aggregates.sum(products.![isActive ? 0 : 1])}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Low Stock Items</div>
+                <div class="stat-value"
+                     th:text="${#aggregates.sum(products.![stockQuantity <= 10 ? 1 : 0])}">0</div>
+            </div>
+        </div>
+
+        <div class="card-ui section-card" style="margin-bottom: 18px;">
+            <form method="get" th:action="@{/admin/products}" class="form-grid">
+                <div class="col-4">
+                    <label class="form-label">Search</label>
+                    <input type="text"
+                           name="keyword"
+                           class="form-control-ui"
+                           th:value="${keyword}"
+                           placeholder="Search by product name...">
+                </div>
+
+                <div class="col-4">
+                    <label class="form-label">Category</label>
+                    <select name="categoryId" class="form-select-ui">
+                        <option value="">All Categories</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}"
+                                th:selected="${categoryId != null and category.id == categoryId}">
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-2">
+                    <label class="form-label">Status</label>
+                    <select name="isActive" class="form-select-ui">
+                        <option value="">All</option>
+                        <option value="true" th:selected="${isActive != null and isActive}">Active</option>
+                        <option value="false" th:selected="${isActive != null and !isActive}">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="col-2">
+                    <label class="form-label">Sort</label>
+                    <select name="sort" class="form-select-ui">
+                        <option value="newest" th:selected="${sort == 'newest'}">Newest</option>
+                        <option value="oldest" th:selected="${sort == 'oldest'}">Oldest</option>
+                        <option value="name-asc" th:selected="${sort == 'name-asc'}">Name A-Z</option>
+                        <option value="name-desc" th:selected="${sort == 'name-desc'}">Name Z-A</option>
+                        <option value="price-asc" th:selected="${sort == 'price-asc'}">Price Low-High</option>
+                        <option value="price-desc" th:selected="${sort == 'price-desc'}">Price High-Low</option>
+                        <option value="stock-asc" th:selected="${sort == 'stock-asc'}">Stock Low-High</option>
+                        <option value="stock-desc" th:selected="${sort == 'stock-desc'}">Stock High-Low</option>
+                    </select>
+                </div>
+
+                <div class="col-12" style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="submit" class="btn-ui btn-primary-ui">Apply Filters</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card-ui section-card">
+            <div class="table-wrap">
+                <table class="table-ui">
+                    <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th style="width: 160px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${products}">
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 12px;">
+                                <img class="image-preview"
+                                     th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                                     th:src="@{${item.imageUrl}(v=${item.updatedAt})}"
+                                     alt="product"
+                                     onerror="this.onerror=null;this.src='[[@{/images/no-image.png}]]';">
+
+                                <img class="image-preview"
+                                     th:if="${item.imageUrl == null or #strings.isEmpty(item.imageUrl)}"
+                                     th:src="@{/images/no-image.png}"
+                                     alt="product">
+
+                                <div>
+                                    <div style="font-weight: 700;" th:text="${item.name}">Product Name</div>
+                                    <div style="color: var(--muted); font-size: 13px;"
+                                         th:text="${item.description != null ? #strings.abbreviate(item.description, 55) : 'No description'}">
+                                        Description
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td th:text="${item.category != null ? item.category.name : 'N/A'}">Category</td>
+
+                        <td th:text="${#numbers.formatDecimal(item.price, 1, 2)}">0.00</td>
+
+                        <td>
+                            <span th:if="${item.stockQuantity > 10}" class="badge-ui badge-success"
+                                  th:text="${item.stockQuantity}"></span>
+                            <span th:if="${item.stockQuantity > 0 and item.stockQuantity <= 10}" class="badge-ui badge-warning"
+                                  th:text="${item.stockQuantity}"></span>
+                            <span th:if="${item.stockQuantity <= 0}" class="badge-ui badge-danger"
+                                  th:text="${item.stockQuantity}"></span>
+                        </td>
+
+                        <td>
+                            <span th:if="${item.isActive}" class="badge-ui badge-success">Active</span>
+                            <span th:unless="${item.isActive}" class="badge-ui" style="background:#eef2f7;color:#64748b;">Inactive</span>
+                        </td>
+
+                        <td>
+                            <div class="action-group">
+                                <a th:href="@{'/admin/products/' + ${item.id} + '/edit'}" class="btn-ui btn-light-ui">Edit</a>
+
+                                <form th:action="@{'/admin/products/' + ${item.id} + '/toggle-status'}"
+                                      method="post"
+                                      style="display:inline;">
+                                    <button type="submit"
+                                            class="btn-ui"
+                                            th:classappend="${item.isActive} ? ' btn-danger-ui' : ' btn-light-ui'"
+                                            th:text="${item.isActive} ? 'Disable' : 'Enable'">
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="6" style="text-align: center; color: var(--muted); padding: 24px;">
+                            No products found.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+                <div style="color: var(--muted); font-size: 14px;">
+                    Showing
+                    <span th:text="${productPage.number * productPage.size + 1}">1</span>
+                    to
+                    <span th:text="${productPage.number * productPage.size + products.size()}">10</span>
+                    of
+                    <span th:text="${productPage.totalElements}">0</span>
+                    products
+                </div>
+
+                <div class="action-group">
+                    <a class="icon-btn"
+                       th:if="${!productPage.first}"
+                       th:href="@{/admin/products(page=${productPage.number - 1}, keyword=${keyword}, categoryId=${categoryId}, isActive=${isActive}, sort=${sort}, size=${size})}">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+
+                    <span class="icon-btn"
+                          th:each="i : ${#numbers.sequence(0, productPage.totalPages - 1)}"
+                          th:style="${i == productPage.number} ? 'background: var(--primary); color: white; border-color: var(--primary);' : ''">
+                        <a th:href="@{/admin/products(page=${i}, keyword=${keyword}, categoryId=${categoryId}, isActive=${isActive}, sort=${sort}, size=${size})}"
+                           th:text="${i + 1}"
+                           style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;color:inherit;">
+                        </a>
+                    </span>
+
+                    <a class="icon-btn"
+                       th:if="${!productPage.last}"
+                       th:href="@{/admin/products(page=${productPage.number + 1}, keyword=${keyword}, categoryId=${categoryId}, isActive=${isActive}, sort=${sort}, size=${size})}">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html>
