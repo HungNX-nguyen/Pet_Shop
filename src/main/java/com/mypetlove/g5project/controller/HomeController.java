@@ -35,9 +35,9 @@ public class HomeController {
 
     @GetMapping("/products")
     public String showProducts(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) String keyword,
-            @RequestParam(required = false) Integer categoryId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestParam(value = "categoryId", required = false) Integer categoryId,
             Model model) {
 
         Pageable pageable = PageRequest.of(page, 9);
@@ -68,7 +68,7 @@ public class HomeController {
     }
 
     @GetMapping("/products/{id}")
-    public String showProductDetail(@PathVariable Integer id, Model model) {
+    public String showProductDetail(@PathVariable("id") Integer id, Model model) {
         ProductDetailResponse product = productService.getProductDetailById(id);
         model.addAttribute("product", product);
 

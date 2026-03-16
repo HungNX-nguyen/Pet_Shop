@@ -10,6 +10,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import com.mypetlove.g5project.dto.ProductRequest;
 import com.mypetlove.g5project.entity.Account;
@@ -21,17 +27,15 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 import org.springframework.data.domain.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.util.stream.Collectors;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import org.springframework.data.domain.*;
+
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.math.BigDecimal;
 import com.mypetlove.g5project.dto.DtoRespone.ProductCardResponse;
 import com.mypetlove.g5project.dto.DtoRespone.ProductDetailResponse;
+import org.springframework.web.multipart.MultipartFile;
+
 @Transactional
 @Service
 @Slf4j
@@ -135,20 +139,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findTop8ByIsActiveTrueOrderByIdDesc();
     }
 
-    /**
-     * Lấy sản phẩm active
-     * @return
-     */
     @Override
     public List<Product> getAllActiveProducts() {
         return productRepository.findByIsActiveTrue();
     }
 
-    /**
-     * Tìm kiếm theo tên
-     * @param keyword: tên sp
-     * @return
-     */
     @Override
     public List<Product> searchProducts(String keyword) {
         return productRepository.findByNameContainingIgnoreCaseAndIsActiveTrue(keyword);
@@ -292,4 +287,6 @@ public class ProductServiceImpl implements ProductService {
                 .categoryId(product.getCategory() != null ? product.getCategory().getId() : null)
                 .build();
     }
+
+
 }

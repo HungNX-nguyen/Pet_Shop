@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragment/head :: head('Kết quả thanh toán - PetCare')}"></head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+
+<div th:replace="~{fragment/header :: header}"></div>
+
+<main class="flex-1 flex flex-col items-center py-12 px-4 max-w-4xl mx-auto w-full">
+
+    <!-- SUCCESS -->
+    <div th:if="${status == 'success'}" class="w-full">
+
+        <!-- Icon & Heading -->
+        <div class="flex flex-col items-center text-center mb-10">
+            <div class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-5xl">check_circle</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Thanh toán thành công!</h1>
+            <p class="text-primary font-semibold text-lg" th:text="'Đơn hàng #' + ${orderCode}"></p>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Cảm ơn bạn đã mua hàng tại PetShop.</p>
+        </div>
+
+        <!-- Detail Card -->
+        <div class="max-w-xl mx-auto w-full bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 mb-8">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">receipt_long</span>
+                Chi tiết giao dịch
+            </h3>
+            <div class="space-y-3 divide-y divide-slate-100 dark:divide-slate-800">
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Mã đơn hàng</span>
+                    <span class="font-bold" th:text="${orderCode}"></span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Số tiền</span>
+                    <span class="font-bold text-primary"
+                          th:text="${#numbers.formatInteger(amount, 3, 'COMMA') + ' VNĐ'}"></span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Mã giao dịch VNPay</span>
+                    <span class="font-mono text-sm" th:text="${transactionNo}"></span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Trạng thái</span>
+                    <span class="inline-flex items-center gap-1 text-green-600 font-semibold">
+                        <span class="material-symbols-outlined text-sm">check_circle</span>
+                        Đã thanh toán
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col items-center gap-4">
+            <a th:href="@{/orders/{id}(id=${orderId})}"
+               class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-10 py-4 text-base font-bold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all">
+                <span class="material-symbols-outlined">package_2</span>
+                Xem đơn hàng
+            </a>
+            <a th:href="@{/products}"
+               class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-slate-800 dark:hover:text-white transition-colors">
+                Tiếp tục mua sắm
+            </a>
+        </div>
+    </div>
+
+    <!-- FAILED -->
+    <div th:if="${status == 'failed'}" class="w-full">
+
+        <!-- Icon & Heading -->
+        <div class="flex flex-col items-center text-center mb-10">
+            <div class="w-20 h-20 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-red-500 dark:text-red-400 text-5xl">cancel</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-2">Thanh toán thất bại</h1>
+            <p class="text-primary font-semibold text-lg" th:text="'Đơn hàng #' + ${orderCode}"></p>
+            <p class="text-slate-500 dark:text-slate-400 mt-2">Giao dịch không thành công hoặc đã bị hủy.</p>
+        </div>
+
+        <!-- Detail Card -->
+        <div class="max-w-xl mx-auto w-full bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm border border-slate-100 dark:border-slate-800 mb-8">
+            <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined text-red-500">info</span>
+                Thông tin lỗi
+            </h3>
+            <div class="space-y-3 divide-y divide-slate-100 dark:divide-slate-800">
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Mã đơn hàng</span>
+                    <span class="font-bold" th:text="${orderCode}"></span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Mã lỗi VNPay</span>
+                    <span class="font-mono text-sm text-red-500" th:text="${responseCode}"></span>
+                </div>
+                <div class="flex justify-between py-2">
+                    <span class="text-slate-500">Trạng thái</span>
+                    <span class="inline-flex items-center gap-1 text-red-500 font-semibold">
+                        <span class="material-symbols-outlined text-sm">cancel</span>
+                        Đã hủy
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support box -->
+        <div class="max-w-xl mx-auto w-full bg-primary/5 dark:bg-primary/10 rounded-xl p-5 border border-primary/10 mb-8">
+            <h3 class="text-sm font-bold mb-1 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-sm">support_agent</span>
+                Cần hỗ trợ?
+            </h3>
+            <p class="text-xs text-slate-600 dark:text-slate-400">
+                Nếu bạn đã bị trừ tiền nhưng đơn hàng thất bại, vui lòng liên hệ đội hỗ trợ của chúng tôi 24/7.
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex flex-col items-center gap-4">
+            <a th:href="@{/orders}"
+               class="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-10 py-4 text-base font-bold text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-all">
+                <span class="material-symbols-outlined">list_alt</span>
+                Về lịch sử đơn hàng
+            </a>
+            <a th:href="@{/products}"
+               class="text-slate-500 dark:text-slate-400 text-sm font-medium hover:text-slate-800 dark:hover:text-white transition-colors">
+                Tiếp tục mua sắm
+            </a>
+        </div>
+    </div>
+
+</main>
+
+<div th:replace="~{fragment/footer :: footer}"></div>
+</body>
+</html>

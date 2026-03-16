@@ -3,6 +3,8 @@ package com.mypetlove.g5project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,12 +22,12 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private Integer accountID;
+    private Integer accountId;
 
     @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(name = "full_Name", nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     @Column(unique = true)
@@ -38,9 +40,11 @@ public class Account {
     private String phoneNumber;
 
     @Column(name = "created_at")
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @Column(name = "is_active")
@@ -62,7 +66,7 @@ public class Account {
     private List<Product> products;
 
     @OneToMany(mappedBy = "creator")
-    private List<Service> serviceEntities;
+    private List<Service> services;
 
 
     @OneToMany(mappedBy = "customer")

@@ -87,7 +87,7 @@ public class AuthController {
 
             // Bước 6: Build composite key SAU KHI đã có accountId
             AccountRoleId accountRoleId = AccountRoleId.builder()
-                    .accountId(newAccount.getAccountID())
+                    .accountId(newAccount.getAccountId())
                     .roleId(customerRole.getRoleId())
                     .build();
 
