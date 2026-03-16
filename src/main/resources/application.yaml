@@ -7,7 +7,7 @@ spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/petlover"
     username: root
-    password: 123456
+    password: hunghet1
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,4 +22,9 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
 
-
+vnpay:
+  tmn-code: "0LDS4NZ9"
+  hash-secret: "Q5BU9LPCTFOJKM1KDFCGR44K54GMXRBE"
+  payment-url: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
+  return-url: "http://localhost:8080/petlover/payment/vnpay-return"
+  api-version: "2.1.0"

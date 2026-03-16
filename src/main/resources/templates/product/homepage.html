@@ -43,13 +43,15 @@
             </div>
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Lặp qua danh sách categories từ Model -->
-                <div class="group cursor-pointer" th:each="category : ${categories}">
+                <a th:href="@{/products(categoryId=${category.id})}" 
+                   class="group cursor-pointer block" 
+                   th:each="category : ${categories}">
                     <div class="bg-slate-100 dark:bg-slate-800 rounded-2xl p-8 text-center transition-all group-hover:bg-primary group-hover:-translate-y-2">
                         <span class="material-symbols-outlined text-primary text-5xl mb-4 group-hover:text-white">category</span>
                         <h3 class="font-bold text-lg group-hover:text-white" th:text="${category.name}">Category Name</h3>
                         <p class="text-sm text-slate-500 group-hover:text-white/80" th:text="${category.description}">Description</p>
                     </div>
-                </div>
+                </a>
             </div>
         </div>
     </section>
@@ -74,7 +76,7 @@
                     <div class="relative aspect-square overflow-hidden bg-slate-50">
                         <img th:alt="${product.name}"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                             th:src="${product.imageUrl}"
+                             th:src="@{${product.imageUrl != null and product.imageUrl.startsWith('http') ? product.imageUrl : '/' + product.imageUrl}}"
                              src="https://via.placeholder.com/300"/>
                         <div class="absolute top-3 right-3">
                             <button class="w-8 h-8 bg-white/90 rounded-full flex items-center justify-center text-slate-900 hover:text-primary transition-colors">
@@ -94,9 +96,11 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xl font-bold text-primary"
                                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</span>
-                            <span class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
+                            <button type="button"
+                                    th:onclick="'addToCart(' + ${product.id} + '); return false;'"
+                                    class="p-2 bg-slate-900 dark:bg-primary text-white rounded-lg hover:opacity-90 transition-opacity">
                                 <span class="material-symbols-outlined">add_shopping_cart</span>
-                            </span>
+                            </button>
                         </div>
                     </div>
                 </a>
@@ -157,5 +161,5 @@
 
 <!-- Footer Fragment -->
 <footer th:replace="~{fragment/footer :: footer}"></footer>
-
+<script th:src="@{/js/cart.js}"></script>
 </body></html>

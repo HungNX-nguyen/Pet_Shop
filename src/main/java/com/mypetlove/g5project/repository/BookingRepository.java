@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
 
-    List<Booking> findByCustomer_AccountID(Integer accountId);
+    List<Booking> findByCustomer_AccountId(Integer customerAccountId);
 
     // Kiểm tra slot đã bị đặt chưa
     @Query("""

@@ -27,13 +27,14 @@
                            placeholder="Search products..."
                            type="text"/>
                 </form>
-                <button class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+                <a th:href="@{/cart}" class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors flex items-center justify-center">
                     <span class="material-symbols-outlined">shopping_cart</span>
-                    <span class="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">3</span>
-                </button>
+                    <span id="cart-badge" class="absolute top-0 right-0 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                </a>
 
                 <!-- Khi đã đăng nhập: avatar + dropdown -->
                 <div sec:authorize="isAuthenticated()" class="relative" id="userMenuWrapper">
+                    <span id="auth-status" style="display:none"></span>
                     <!-- Avatar button -->
                     <button type="button"
                             id="userMenuBtn"
