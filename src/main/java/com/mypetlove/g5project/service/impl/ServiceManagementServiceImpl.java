@@ -69,7 +69,7 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
         serviceEntity.setDescription(request.getDescription());
         serviceEntity.setPrice(request.getPrice());
         serviceEntity.setDuration(request.getDuration());
-        serviceEntity.setCreatedBy(account);
+        serviceEntity.setCreator(account);
         serviceEntity.setCreatedAt(LocalDateTime.now());
         serviceEntity.setUpdatedAt(LocalDateTime.now());
         serviceEntity.setIsActive(true); // create luôn active

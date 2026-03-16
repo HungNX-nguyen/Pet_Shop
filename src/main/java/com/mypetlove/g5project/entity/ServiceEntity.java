@@ -22,7 +22,7 @@ public class ServiceEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
-    private Account createdBy;
+    private Account creator;
 
     @Column(length = 255)
     private String name;

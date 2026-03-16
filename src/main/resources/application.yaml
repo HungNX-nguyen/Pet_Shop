@@ -17,6 +17,11 @@ spring:
 
   thymeleaf:
     cache: false
+    mode: HTML
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+
 
 server:
   port: 8080

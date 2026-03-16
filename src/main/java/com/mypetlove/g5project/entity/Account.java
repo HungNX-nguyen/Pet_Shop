@@ -61,7 +61,7 @@ public class Account {
     @OneToMany(mappedBy = "creator")
     private List<Product> products;
 
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "creator")
     private List<ServiceEntity> serviceEntities;
 
 
