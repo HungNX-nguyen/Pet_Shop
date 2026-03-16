@@ -62,7 +62,7 @@ public class Account {
     private List<Product> products;
 
     @OneToMany(mappedBy = "creator")
-    private List<ServiceEntity> serviceEntities;
+    private List<Service> serviceEntities;
 
 
     @OneToMany(mappedBy = "customer")

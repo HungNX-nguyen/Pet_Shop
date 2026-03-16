@@ -45,6 +45,10 @@
                         <div class="col-6">
                             <label class="form-label">Price</label>
                             <input type="number" step="0.01" th:field="*{price}" class="form-control-ui">
+                            <div th:if="${#fields.hasErrors('price')}"
+                                 th:errors="*{price}"
+                                 style="margin-top:6px; color:#ef4444; font-size:13px;">
+                            </div>
                         </div>
 
                         <div class="col-6">
@@ -66,17 +70,17 @@
                     <label class="form-label">Description</label>
                     <textarea th:field="*{description}" class="form-textarea-ui"></textarea>
                 </div>
-
+                <input type="hidden" th:field="*{imageUrl}">
                 <div class="col-4">
                     <label class="form-label">Replace Product Image</label>
                     <div class="card-ui section-card" style="padding:16px;">
                         <input type="file" th:field="*{imageFile}" id="imageFileInput" accept="image/*" class="form-control-ui">
 
                         <div style="height:16px"></div>
-
+                        <input type="hidden" th:field="*{imageUrl}">
                         <div style="border:1px dashed var(--border); border-radius:16px; padding:16px; text-align:center; background:#fafafa;">
                             <img id="previewImage"
-                                 th:src="${productRequest.imageUrl != null and !#strings.isEmpty(productRequest.imageUrl) ? productRequest.imageUrl : '/images/no-image.png'}"
+                                 th:src="${productRequest.imageUrl != null and !#strings.isEmpty(productRequest.imageUrl) ? ctx + productRequest.imageUrl : ctx + '/images/no-image.png'}"
                                  alt="preview"
                                  style="width:100%; max-height:260px; object-fit:contain; border-radius:12px;">
                         </div>
@@ -97,12 +101,14 @@
         const input = document.getElementById("imageFileInput");
         const preview = document.getElementById("previewImage");
 
-        input.addEventListener("change", function () {
-            const file = this.files[0];
-            if (file) {
-                preview.src = URL.createObjectURL(file);
-            }
-        });
+        if (input && preview) {
+            input.addEventListener("change", function () {
+                const file = this.files[0];
+                if (file) {
+                    preview.src = URL.createObjectURL(file);
+                }
+            });
+        }
     });
 </script>
 </body>

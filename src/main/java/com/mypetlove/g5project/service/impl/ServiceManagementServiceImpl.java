@@ -2,20 +2,19 @@ package com.mypetlove.g5project.service.impl;
 
 import com.mypetlove.g5project.dto.ServiceRequest;
 import com.mypetlove.g5project.entity.Account;
-import com.mypetlove.g5project.entity.ServiceEntity;
+import com.mypetlove.g5project.entity.Service;
 import com.mypetlove.g5project.repository.AccountRepository;
 import com.mypetlove.g5project.repository.ServiceRepository;
 import com.mypetlove.g5project.service.ServiceManagementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class ServiceManagementServiceImpl implements ServiceManagementService {
 
@@ -23,7 +22,7 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
     private final AccountRepository accountRepository;
 
     @Override
-    public Page<ServiceEntity> getPage(String keyword, String category, String sort, int page, int size) {
+    public Page<Service> getPage(String keyword, String category, String sort, int page, int size) {
         Sort sortObj = switch (sort == null ? "newest" : sort) {
             case "price" -> Sort.by("price").ascending();
             case "duration" -> Sort.by("duration").ascending();
@@ -45,13 +44,13 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
     }
 
     @Override
-    public ServiceEntity getById(Integer id) {
+    public Service getById(Integer id) {
         return serviceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Service not found"));
     }
 
     @Override
-    public ServiceEntity create(ServiceRequest request, String username) {
+    public Service create(ServiceRequest request, String username) {
         Account account;
 
         if (username != null && !"anonymousUser".equals(username)) {
@@ -63,41 +62,41 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
                     .orElseThrow(() -> new RuntimeException("No account found"));
         }
 
-        ServiceEntity serviceEntity = new ServiceEntity();
-        serviceEntity.setName(request.getName());
-        serviceEntity.setCategory(request.getCategory());
-        serviceEntity.setDescription(request.getDescription());
-        serviceEntity.setPrice(request.getPrice());
-        serviceEntity.setDuration(request.getDuration());
-        serviceEntity.setCreator(account);
-        serviceEntity.setCreatedAt(LocalDateTime.now());
-        serviceEntity.setUpdatedAt(LocalDateTime.now());
-        serviceEntity.setIsActive(true); // create luôn active
+        Service service = new Service();
+        service.setName(request.getName());
+        service.setCategory(request.getCategory());
+        service.setDescription(request.getDescription());
+        service.setPrice(request.getPrice());
+        service.setDuration(request.getDuration());
+        service.setCreator(account);
+        service.setCreatedAt(LocalDateTime.now());
+        service.setUpdatedAt(LocalDateTime.now());
+        service.setIsActive(true); // create luôn active
 
-        return serviceRepository.save(serviceEntity);
+        return serviceRepository.save(service);
     }
 
     @Override
-    public ServiceEntity update(Integer id, ServiceRequest request) {
-        ServiceEntity serviceEntity = getById(id);
+    public Service update(Integer id, ServiceRequest request) {
+        Service service = getById(id);
 
-        serviceEntity.setName(request.getName());
-        serviceEntity.setCategory(request.getCategory());
-        serviceEntity.setDescription(request.getDescription());
-        serviceEntity.setPrice(request.getPrice());
-        serviceEntity.setDuration(request.getDuration());
-        serviceEntity.setUpdatedAt(LocalDateTime.now());
+        service.setName(request.getName());
+        service.setCategory(request.getCategory());
+        service.setDescription(request.getDescription());
+        service.setPrice(request.getPrice());
+        service.setDuration(request.getDuration());
+        service.setUpdatedAt(LocalDateTime.now());
 
         // KHÔNG sửa isActive ở đây nữa
-        return serviceRepository.save(serviceEntity);
+        return serviceRepository.save(service);
     }
 
     @Override
     public void toggleStatus(Integer id) {
-        ServiceEntity serviceEntity = getById(id);
-        serviceEntity.setIsActive(!Boolean.TRUE.equals(serviceEntity.getIsActive()));
-        serviceEntity.setUpdatedAt(LocalDateTime.now());
-        serviceRepository.save(serviceEntity);
+        Service service = getById(id);
+        service.setIsActive(!Boolean.TRUE.equals(service.getIsActive()));
+        service.setUpdatedAt(LocalDateTime.now());
+        serviceRepository.save(service);
     }
 
     @Override
@@ -117,12 +116,12 @@ public class ServiceManagementServiceImpl implements ServiceManagementService {
 
     @Override
     public BigDecimal averagePrice() {
-        List<ServiceEntity> services = serviceRepository.findAll();
+        List<Service> services = serviceRepository.findAll();
 
         if (services.isEmpty()) return BigDecimal.ZERO;
 
         BigDecimal total = services.stream()
-                .map(ServiceEntity::getPrice)
+                .map(Service::getPrice)
                 .filter(p -> p != null)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 

@@ -1,7 +1,7 @@
 package com.mypetlove.g5project.controller;
 
 import com.mypetlove.g5project.dto.ServiceRequest;
-import com.mypetlove.g5project.entity.ServiceEntity;
+import com.mypetlove.g5project.entity.Service;
 import com.mypetlove.g5project.service.ServiceManagementService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +28,7 @@ public class ServiceController {
                        @RequestParam(defaultValue = "5") int size,
                        Model model) {
 
-        Page<ServiceEntity> servicePage = serviceManagementService.getPage(keyword, category, sort, page, size);
+        Page<Service> servicePage = serviceManagementService.getPage(keyword, category, sort, page, size);
 
         model.addAttribute("servicePage", servicePage);
         model.addAttribute("services", servicePage.getContent());
@@ -70,7 +70,7 @@ public class ServiceController {
 
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Integer id, Model model) {
-        ServiceEntity serviceData = serviceManagementService.getById(id);
+        Service serviceData = serviceManagementService.getById(id);
 
         ServiceRequest request = new ServiceRequest();
         request.setName(serviceData.getName());

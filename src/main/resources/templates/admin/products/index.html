@@ -113,10 +113,15 @@
                         <td>
                             <div style="display: flex; align-items: center; gap: 12px;">
                                 <img class="image-preview"
-                                     th:src="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl) ? item.imageUrl + '?v=' + item.updatedAt : '/images/no-image.png'}"
-                                     src="/images/no-image.png"
+                                     th:if="${item.imageUrl != null and !#strings.isEmpty(item.imageUrl)}"
+                                     th:src="@{${item.imageUrl}(v=${item.updatedAt})}"
                                      alt="product"
-                                     onerror="this.onerror=null;this.src='/images/no-image.png';">
+                                     onerror="this.onerror=null;this.src='[[@{/images/no-image.png}]]';">
+
+                                <img class="image-preview"
+                                     th:if="${item.imageUrl == null or #strings.isEmpty(item.imageUrl)}"
+                                     th:src="@{/images/no-image.png}"
+                                     alt="product">
 
                                 <div>
                                     <div style="font-weight: 700;" th:text="${item.name}">Product Name</div>
