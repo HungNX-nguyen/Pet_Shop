@@ -44,26 +44,26 @@ INSERT INTO Pets(owner_id,name,type,breed,gender,weight,age) VALUES
 -- PRODUCTS (20 PRODUCTS)
 ------------------------------------------------
 INSERT INTO Products(created_by,category_id,name,description,price,stock_quantity,image_url) VALUES
-(1,1,'Premium Dog Food','High quality dog food',20,100,'dogfood1.jpg'),
-(1,1,'Organic Dog Food','Healthy dog food',25,80,'dogfood2.jpg'),
-(1,2,'Salmon Cat Food','Salmon flavor cat food',18,90,'catfood1.jpg'),
-(1,2,'Tuna Cat Food','Tuna flavor cat food',17,100,'catfood2.jpg'),
-(1,3,'Rubber Dog Ball','Durable dog toy',8,150,'toy1.jpg'),
-(1,3,'Cat Feather Toy','Interactive toy',6,200,'toy2.jpg'),
-(1,4,'Dog Collar','Adjustable collar',12,120,'collar.jpg'),
-(1,4,'Cat Collar','Cute cat collar',10,140,'catcollar.jpg'),
-(1,4,'Dog Leash','Strong dog leash',15,90,'leash.jpg'),
-(1,5,'Pet Shampoo','Gentle shampoo',14,60,'shampoo.jpg'),
-(1,5,'Flea Treatment','Anti flea medicine',22,50,'flea.jpg'),
-(2,1,'Puppy Food','Food for puppies',19,70,'puppyfood.jpg'),
-(2,1,'Senior Dog Food','Food for old dogs',23,60,'seniordog.jpg'),
-(2,2,'Kitten Food','Food for kittens',16,85,'kitten.jpg'),
-(2,2,'Indoor Cat Food','Food for indoor cats',18,75,'indoorcat.jpg'),
-(2,3,'Chew Bone Toy','Dog chew toy',7,130,'chewbone.jpg'),
-(2,3,'Laser Cat Toy','Laser toy for cats',9,110,'laser.jpg'),
-(2,4,'Pet Bed','Soft pet bed',30,40,'bed.jpg'),
-(2,4,'Travel Pet Bag','Portable pet bag',35,30,'bag.jpg'),
-(2,5,'Vitamin Supplement','Pet vitamins',28,45,'vitamin.jpg');
+(1,1,'Premium Dog Food','High quality dog food',20000,100,'dogfood1.jpg'),
+(1,1,'Organic Dog Food','Healthy dog food',25000,80,'dogfood2.jpg'),
+(1,2,'Salmon Cat Food','Salmon flavor cat food',18000,90,'catfood1.jpg'),
+(1,2,'Tuna Cat Food','Tuna flavor cat food',17000,100,'catfood2.jpg'),
+(1,3,'Rubber Dog Ball','Durable dog toy',8000,150,'toy1.jpg'),
+(1,3,'Cat Feather Toy','Interactive toy',6000,200,'toy2.jpg'),
+(1,4,'Dog Collar','Adjustable collar',12000,120,'collar.jpg'),
+(1,4,'Cat Collar','Cute cat collar',10000,140,'catcollar.jpg'),
+(1,4,'Dog Leash','Strong dog leash',15000,90,'leash.jpg'),
+(1,5,'Pet Shampoo','Gentle shampoo',14000,60,'shampoo.jpg'),
+(1,5,'Flea Treatment','Anti flea medicine',22000,50,'flea.jpg'),
+(2,1,'Puppy Food','Food for puppies',19000,70,'puppyfood.jpg'),
+(2,1,'Senior Dog Food','Food for old dogs',23000,60,'seniordog.jpg'),
+(2,2,'Kitten Food','Food for kittens',16000,85,'kitten.jpg'),
+(2,2,'Indoor Cat Food','Food for indoor cats',18000,75,'indoorcat.jpg'),
+(2,3,'Chew Bone Toy','Dog chew toy',7000,130,'chewbone.jpg'),
+(2,3,'Laser Cat Toy','Laser toy for cats',9000,110,'laser.jpg'),
+(2,4,'Pet Bed','Soft pet bed',30000,40,'bed.jpg'),
+(2,4,'Travel Pet Bag','Portable pet bag',35000,30,'bag.jpg'),
+(2,5,'Vitamin Supplement','Pet vitamins',28000,45,'vitamin.jpg');
 
 ------------------------------------------------
 -- SERVICES
@@ -113,10 +113,3 @@ INSERT INTO PaymentHistories(order_id,amount,payment_method,payment_status,payme
 (1,40,'CASH',TRUE,NOW()),
 (3,52,'BANK_TRANSFER',TRUE,NOW());
 
-------------------------------------------------
--- FEEDBACKS
-------------------------------------------------
-INSERT INTO Feedbacks(customer_id,rating,comment) VALUES
-(3,5,'Great service!'),
-(4,4,'Good products'),
-(5,5,'Very satisfied');

@@ -50,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Khong co san pham nao duoc chon");
         }
 
-        // Kiem tra ton kho truoc khi tao order
         for (CartItem cartItem : selectedItems) {
             Product product = cartItem.getProduct();
             if (product.getStockQuantity() < cartItem.getQuantity()) {
@@ -70,12 +69,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = Order.builder()
                 .orderCode("ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase())
                 .customer(account)
-                .status("WAITING_PAYMENT")
+                .status(Order.OrderStatus.WAITING_PAYMENT)   // ✅ enum
                 .totalAmount(total)
                 .build();
         orderRepository.save(order);
 
-        // Tao OrderItems + tru stockQuantity
         for (CartItem cartItem : selectedItems) {
             Product product = cartItem.getProduct();
             int orderedQty = cartItem.getQuantity();
@@ -92,7 +90,6 @@ public class OrderServiceImpl implements OrderService {
                     .build();
             orderItemRepository.save(orderItem);
 
-            // Tru stockQuantity
             product.setStockQuantity(product.getStockQuantity() - orderedQty);
             productRepository.save(product);
         }
@@ -106,7 +103,6 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         paymentHistoryRepository.save(paymentHistory);
 
-        // Xoa CartItem bang JPQL de tranh Hibernate cache conflict
         List<Integer> selectedItemIds = selectedItems.stream()
                 .map(CartItem::getId)
                 .collect(Collectors.toList());
@@ -153,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
         return OrderDetailDto.builder()
                 .orderId(order.getId())
                 .orderCode(order.getOrderCode())
-                .status(order.getStatus())
+                .status(order.getStatus().name())            // ✅ enum → String cho DTO
                 .shippingAddress(order.getShippingAddress())
                 .paymentMethod(paymentMethod)
                 .paymentStatus(paymentStatus)
@@ -175,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Unauthorized");
         }
 
-        if (!"WAITING_PAYMENT".equals(order.getStatus())) {
+        if (order.getStatus() != Order.OrderStatus.WAITING_PAYMENT) {   // ✅ enum
             throw new RuntimeException("Order khong o trang thai cho thanh toan");
         }
 
@@ -183,9 +179,9 @@ public class OrderServiceImpl implements OrderService {
 
         if (order.getPaymentHistory() != null
                 && "COD".equalsIgnoreCase(order.getPaymentHistory().getPaymentMethod())) {
-            order.setStatus("PROCESSING");
+            order.setStatus(Order.OrderStatus.PROCESSING);   // ✅ enum
         } else {
-            order.setStatus("CONFIRMED");
+            order.setStatus(Order.OrderStatus.CONFIRMED);    // ✅ enum
         }
 
         orderRepository.save(order);
@@ -196,8 +192,53 @@ public class OrderServiceImpl implements OrderService {
     public Page<Order> getOrderHistory(String username, int page, int size) {
         Account account = accountRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        
+
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
         return orderRepository.findByCustomer(account, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Order> getOrderHistoryByStatus(String username, String status, int page, int size) {
+        Account account = accountRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        if (status == null || status.isBlank() || "ALL".equalsIgnoreCase(status)) {
+            return orderRepository.findByCustomer(account, pageable);
+        }
+
+        // ✅ Map String tab → List<Order.OrderStatus> enum
+        List<Order.OrderStatus> dbStatuses = switch (status.toUpperCase()) {
+            case "PENDING"    -> List.of(Order.OrderStatus.WAITING_PAYMENT);
+            case "PROCESSING" -> List.of(Order.OrderStatus.PROCESSING, Order.OrderStatus.CONFIRMED);
+            case "SHIPPING"   -> List.of(Order.OrderStatus.SHIPPING);
+            case "SUCCESS"    -> List.of(Order.OrderStatus.DELIVERED);
+            case "CANCEL"     -> List.of(Order.OrderStatus.CANCELLED);
+            default           -> List.of(Order.OrderStatus.WAITING_PAYMENT);
+        };
+
+        return orderRepository.findByCustomerAndStatusIn(account, dbStatuses, pageable);
+    }
+
+    @Override
+    @Transactional
+    public void cancelOrder(Integer orderId, String username) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (!order.getCustomer().getUsername().equals(username)) {
+            throw new RuntimeException("Unauthorized");
+        }
+
+        // ✅ So sánh enum
+        if (order.getStatus() != Order.OrderStatus.WAITING_PAYMENT
+                && order.getStatus() != Order.OrderStatus.PROCESSING) {
+            throw new RuntimeException("Không thể hủy đơn hàng ở trạng thái hiện tại");
+        }
+
+        order.setStatus(Order.OrderStatus.CANCELLED);        // ✅ enum
+        orderRepository.save(order);
     }
 }

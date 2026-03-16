@@ -97,11 +97,37 @@ CREATE TABLE Services (
 ) ENGINE=InnoDB;
 
 ------------------------------------------------
+-- CARTS  [MỚI]
+------------------------------------------------
+CREATE TABLE Carts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    customer_id INT NOT NULL UNIQUE,  -- mỗi account chỉ có 1 cart
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+              ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (customer_id) REFERENCES Accounts(account_id)
+) ENGINE=InnoDB;
+
+------------------------------------------------
+-- CART ITEMS  [MỚI]
+------------------------------------------------
+CREATE TABLE CartItems (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cart_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL DEFAULT 1,
+    UNIQUE KEY uq_cart_product (cart_id, product_id),  -- tránh trùng sản phẩm
+    FOREIGN KEY (cart_id) REFERENCES Carts(id),
+    FOREIGN KEY (product_id) REFERENCES Products(id)
+) ENGINE=InnoDB;
+
+------------------------------------------------
 -- BOOKINGS
 ------------------------------------------------
 CREATE TABLE Bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT NOT NULL,
+    pet_id INT,                        -- [THÊM] booking cho thú cưng nào
     booking_code VARCHAR(50),
     booking_date DATE,
     time_slot VARCHAR(50),
@@ -109,7 +135,8 @@ CREATE TABLE Bookings (
     total_price DECIMAL(10,2),
     note TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES Accounts(account_id)
+    FOREIGN KEY (customer_id) REFERENCES Accounts(account_id),
+    FOREIGN KEY (pet_id) REFERENCES Pets(pet_id)
 ) ENGINE=InnoDB;
 
 ------------------------------------------------
@@ -132,6 +159,7 @@ CREATE TABLE Orders (
     order_code VARCHAR(50),
     total_amount DECIMAL(10,2),
     status VARCHAR(50),
+    shipping_address VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME,
     FOREIGN KEY (customer_id) REFERENCES Accounts(account_id)
@@ -165,13 +193,18 @@ CREATE TABLE PaymentHistories (
 ) ENGINE=InnoDB;
 
 ------------------------------------------------
--- FEEDBACKS
+-- FEEDBACKS  [CẢI THIỆN]
 ------------------------------------------------
 CREATE TABLE Feedbacks (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    customer_id INT,
-    rating INT,
+    customer_id INT NOT NULL,
+    product_id INT NOT NULL,           -- [THÊM] feedback cho sản phẩm nào
+    order_id INT NOT NULL,             -- [THÊM] chỉ feedback sau khi đã mua
+    rating INT CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (customer_id) REFERENCES Accounts(account_id)
+    UNIQUE KEY uq_feedback (customer_id, product_id, order_id),  -- mỗi sản phẩm/đơn chỉ feedback 1 lần
+    FOREIGN KEY (customer_id) REFERENCES Accounts(account_id),
+    FOREIGN KEY (product_id) REFERENCES Products(id),
+    FOREIGN KEY (order_id) REFERENCES Orders(id)
 ) ENGINE=InnoDB;

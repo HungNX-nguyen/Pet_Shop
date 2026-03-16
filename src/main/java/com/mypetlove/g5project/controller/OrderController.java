@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
 
@@ -91,28 +92,52 @@ public class OrderController {
     public String orderHistory(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "ALL") String status,
             Authentication authentication,
             Model model) {
-        
+
         if (authentication == null || !authentication.isAuthenticated()
                 || "anonymousUser".equals(authentication.getName())) {
             return "redirect:/login";
         }
 
         try {
-            var orderPage = orderService.getOrderHistory(authentication.getName(), page, size);
+            var orderPage = orderService.getOrderHistoryByStatus(authentication.getName(), status, page, size);
             model.addAttribute("orders", orderPage.getContent());
             model.addAttribute("currentPage", orderPage.getNumber());
             model.addAttribute("totalPages", orderPage.getTotalPages());
             model.addAttribute("totalItems", orderPage.getTotalElements());
+            model.addAttribute("currentStatus", status.toUpperCase());
             return "order/orderhistory";
         } catch (Exception e) {
             model.addAttribute("orders", java.util.Collections.emptyList());
             model.addAttribute("currentPage", 0);
             model.addAttribute("totalPages", 0);
             model.addAttribute("totalItems", 0);
+            model.addAttribute("currentStatus", status.toUpperCase());
             return "order/orderhistory";
         }
+    }
+
+    @PostMapping("/orders/{orderId}/cancel")
+    public String cancelOrder(
+            @PathVariable Integer orderId,
+            @RequestParam(defaultValue = "ALL") String status,
+            Authentication authentication,
+            RedirectAttributes redirectAttributes) {
+
+        if (authentication == null || !authentication.isAuthenticated()
+                || "anonymousUser".equals(authentication.getName())) {
+            return "redirect:/login";
+        }
+
+        try {
+            orderService.cancelOrder(orderId, authentication.getName());
+            redirectAttributes.addFlashAttribute("successMessage", "Đơn hàng đã được hủy thành công.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+        return "redirect:/orders?status=" + status;
     }
 
     @GetMapping("/orders/{orderId}")
@@ -128,4 +153,4 @@ public class OrderController {
             return "redirect:/orders";
         }
     }
-}
+}

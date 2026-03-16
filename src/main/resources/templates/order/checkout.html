@@ -7,6 +7,10 @@
 
 <main class="max-w-7xl mx-auto px-4 py-8">
 
+    <span id="payment-method-data"
+          th:data-method="${order.paymentMethod}"
+          class="hidden"></span>
+
     <!-- Progress Indicator -->
     <div class="mb-10 max-w-2xl mx-auto">
         <div class="flex items-center justify-between mb-2">
@@ -140,6 +144,7 @@
 
                 <!-- Confirm button -->
                 <button id="confirm-btn"
+                        th:data-order-id="${order.orderId}"
                         th:onclick="'confirmOrder(' + ${order.orderId} + ')'"
                         class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <span>Xác nhận đơn hàng</span>

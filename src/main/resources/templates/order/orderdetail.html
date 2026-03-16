@@ -32,7 +32,7 @@
                       class="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 text-xs font-medium text-orange-700">
                     Đang xử lý
                 </span>
-                <span th:if="${order.status == 'SHIPPED'}"
+                <span th:if="${order.status == 'SHIPPING'}"
                       class="inline-flex items-center rounded-full bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700">
                     Đang giao
                 </span>
@@ -43,6 +43,10 @@
                 <span th:if="${order.status == 'CANCELLED'}"
                       class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700">
                     Đã hủy
+                </span>
+                <span th:if="${order.status == 'PAID'}"
+                      class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium text-green-700">
+                    Đã thanh toán
                 </span>
             </div>
         </div>
@@ -67,7 +71,7 @@
                          th:style="${order.status == 'WAITING_PAYMENT' ? 'width:10%' :
                                     order.status == 'CONFIRMED' ? 'width:33%' :
                                     order.status == 'PROCESSING' ? 'width:50%' :
-                                    order.status == 'SHIPPED' ? 'width:75%' :
+                                    order.status == 'SHIPPING' ? 'width:75%' :
                                     order.status == 'DELIVERED' ? 'width:100%' : 'width:0%'}">
                     </div>
                     <div class="relative flex justify-between">
@@ -96,7 +100,7 @@
                                 <span class="material-symbols-outlined text-[14px]">local_shipping</span>
                             </div>
                             <span class="text-xs font-semibold"
-                                  th:classappend="${order.status == 'SHIPPED' or order.status == 'DELIVERED'} ? 'text-primary' : 'text-slate-400'">
+                                  th:classappend="${order.status == 'SHIPPING' or order.status == 'DELIVERED'} ? 'text-primary' : 'text-slate-400'">
                                 Đang giao
                             </span>
                         </div>

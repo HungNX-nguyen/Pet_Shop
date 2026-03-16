@@ -10,4 +10,6 @@ public interface OrderService {
     OrderDetailDto getOrderDetail(Integer orderId, String username);
     void confirmCheckout(Integer orderId, String shippingAddress, String username);
     Page<Order> getOrderHistory(String username, int page, int size);
+    Page<Order> getOrderHistoryByStatus(String username, String status, int page, int size);
+    void cancelOrder(Integer orderId, String username);
 }

@@ -31,16 +31,21 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .authorizeHttpRequests(authorize -> authorize
                         // Public - ai cũng vào được
-                        .requestMatchers("/", "/login", "/register",
+                        .requestMatchers(
+                                "/", "/login", "/register",
                                 "/products", "/products/**",
                                 "/services", "/services/**",
                                 "/cart", "/api/cart/**",
-                                "/css/**", "/js/**", "/images/**").permitAll()
+                                "/css/**", "/js/**", "/images/**",
+                                "/payment/vnpay-return"    // ✅ THÊM DÒNG NÀY
+                        ).permitAll()
                         // Chỉ SHOP_OWNER
                         .requestMatchers("/shop/**", "/admin/**").hasRole("SHOP_OWNER")
                         // Chỉ CUSTOMER
                         .requestMatchers("/orders/**").hasRole("CUSTOMER")
                         .requestMatchers("/orders/*/checkout", "/orders/*/confirm").hasRole("CUSTOMER")
+                        // ✅ THÊM — cho phép CUSTOMER tạo payment VNPay
+                        .requestMatchers("/payment/vnpay/create/**").hasRole("CUSTOMER")
                         .requestMatchers("/api/orders/**").authenticated()
                         // Cả 2 role đều cần login
                         .anyRequest().authenticated()
