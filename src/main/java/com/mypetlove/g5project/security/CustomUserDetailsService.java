@@ -32,6 +32,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         var authorities = account.getAccountRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().getRoleName()))
                 .collect(Collectors.toList());
+        account.getAccountRoles().forEach(ar ->
+                System.out.println("ROLE DB: " + ar.getRole().getRoleName())
+        );
 
         return new User(
                 account.getUsername(),

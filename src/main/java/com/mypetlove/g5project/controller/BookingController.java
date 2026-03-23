@@ -40,6 +40,10 @@ public class BookingController {
                               @AuthenticationPrincipal UserDetails userDetails,
                               Model model) {
 
+        if (userDetails == null) {
+            return "redirect:/login";
+        }
+
         Service service = serviceRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Service not found"));
 
@@ -102,7 +106,7 @@ public class BookingController {
     // ------------------------------------------------
     // GET /bookings
     // ------------------------------------------------
-    @GetMapping("/petlover/bookings")
+    @GetMapping("/bookings")
     public String myBookings(@AuthenticationPrincipal UserDetails userDetails,
                              Model model) {
 
@@ -118,7 +122,7 @@ public class BookingController {
     // ------------------------------------------------
     // POST /bookings/{id}/cancel
     // ------------------------------------------------
-    @PostMapping("/petlover/bookings/{id}/cancel")
+    @PostMapping("/bookings/{id}/cancel")
     public String cancelBooking(@PathVariable Integer id,
                                 @AuthenticationPrincipal UserDetails userDetails,
                                 RedirectAttributes redirectAttrs) {
@@ -128,7 +132,7 @@ public class BookingController {
         } catch (Exception e) {
             redirectAttrs.addFlashAttribute("errorMessage", e.getMessage());
         }
-        return "redirect:/petlover/bookings";
+        return "redirect:/bookings";
     }
 
 
