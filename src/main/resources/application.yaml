@@ -9,7 +9,7 @@ spring:
   datasource:
     url: "jdbc:mysql://localhost:3306/petlover"
     username: root
-    password: hunghet1
+    password: 123456
 
   jpa:
     hibernate:

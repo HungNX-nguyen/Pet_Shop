@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TimeSlotDto {
-    private String value;   // "09:00"
-    private String label;   // "09:00 AM"
+    private String value;
+    private String label;
     private boolean available;
 }

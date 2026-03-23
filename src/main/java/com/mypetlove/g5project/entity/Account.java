@@ -50,7 +50,7 @@ public class Account {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private List<AccountRole> accountRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "owner")
