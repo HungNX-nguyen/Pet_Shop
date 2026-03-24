@@ -33,9 +33,6 @@ public class BookingServiceImpl implements IBookingService {
             "09:00", "10:30", "13:00", "14:30", "16:00", "17:30"
     );
 
-    // ------------------------------------------------------------------ //
-    //  CREATE
-    // ------------------------------------------------------------------ //
     @Override
     public BookingDto createBooking(String username, BookingCreateDto dto) {
         Account customer = accountRepository.findByUsername(username)
@@ -99,10 +96,6 @@ public class BookingServiceImpl implements IBookingService {
     }
 
 
-
-    // ------------------------------------------------------------------ //
-    //  READ
-    // ------------------------------------------------------------------ //
     @Override
     public BookingDto getBookingById(Integer id) {
         Booking booking = findById(id);
@@ -124,9 +117,6 @@ public class BookingServiceImpl implements IBookingService {
                 .toList();
     }
 
-    // ------------------------------------------------------------------ //
-    //  CANCEL
-    // ------------------------------------------------------------------ //
     @Override
     public BookingDto cancelBooking(Integer id, String username) {
         Booking booking = findById(id);
@@ -147,9 +137,7 @@ public class BookingServiceImpl implements IBookingService {
         return toDto(booking, services);
     }
 
-    // ------------------------------------------------------------------ //
-    //  TIME SLOTS
-    // ------------------------------------------------------------------ //
+
     @Override
     public List<TimeSlotDto> getAvailableSlots(LocalDate date) {
         List<String> booked = bookingRepository.findBookedSlotsByDate(date);
@@ -161,9 +149,7 @@ public class BookingServiceImpl implements IBookingService {
         ).toList();
     }
 
-    // ------------------------------------------------------------------ //
-    //  HELPERS
-    // ------------------------------------------------------------------ //
+
     private Booking findById(Integer id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Booking not found: " + id));

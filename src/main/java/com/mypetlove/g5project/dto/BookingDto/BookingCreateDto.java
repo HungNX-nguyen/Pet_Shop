@@ -19,7 +19,7 @@ public class BookingCreateDto {
     private Integer petAge;
     private Double petWeight;
 
-    // Contact info (pre-filled từ account, có thể override)
+    // Contact info
     private String contactName;
     private String contactPhone;
     private String contactEmail;

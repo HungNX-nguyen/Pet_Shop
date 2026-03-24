@@ -20,22 +20,26 @@ public class PetServiceServiceImpl implements PetServiceService {
 
     private final ServiceRepository repository;
 
-
     @Override
     public List<ServiceDto> getAllServices() {
-
         return repository.findAll()
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+    }
+
+    @Override
+    public List<ServiceDto> getAllActiveServices() {
+        return repository.findByIsActiveTrue() // ← chỉ active (cho user)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
     }
 
     @Override
     public ServiceDto getServiceById(Integer id) {
-
         Service service = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Service not found"));
-
+                .orElseThrow(() -> new RuntimeException("Service not found: " + id));
         return convertToDto(service);
     }
 

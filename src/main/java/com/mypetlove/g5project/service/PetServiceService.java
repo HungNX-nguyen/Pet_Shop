@@ -6,6 +6,8 @@ import com.mypetlove.g5project.entity.Service;
 import java.util.List;
 
 public interface PetServiceService {
+    List<ServiceDto> getAllActiveServices();
+
     List<ServiceDto> getAllServices();
 
     ServiceDto getServiceById(Integer id);

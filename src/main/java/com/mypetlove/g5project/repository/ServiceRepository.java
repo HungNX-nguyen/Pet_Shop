@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
     long countByIsActiveTrue();
@@ -14,4 +16,5 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
     Page<Service> findByCategoryIgnoreCaseAndNameContainingIgnoreCase(
             String category, String keyword, Pageable pageable
     );
+    List<Service> findByIsActiveTrue();
 }

@@ -23,7 +23,7 @@ public class ServiceController {
     public String getAllServices(Model model) {
 
         model.addAttribute("services",
-                service.getAllServices());
+                service.getAllActiveServices());
 
         return "service-booking/servicelisting";
     }
